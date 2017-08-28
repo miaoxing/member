@@ -10,4 +10,9 @@ class Member extends BaseService
     {
         return wei()->memberRecord();
     }
+
+    public function getMember()
+    {
+        return wei()->member()->curApp()->notDeleted()->findOrInit(['user_id' => $user['id']]);
+    }
 }
