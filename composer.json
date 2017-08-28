@@ -1,0 +1,23 @@
+{
+  "name": "miaoxing/member",
+  "description": "Miaoxing Member Plugin",
+  "keywords": [
+    "miaoxing", "member"
+  ],
+  "license": "MIT",
+  "require": {
+    "miaoxing/app": "dev-master@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Miaoxing\\Member\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MiaoxingTest\\Member\\": "tests"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
