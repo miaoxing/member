@@ -13,6 +13,7 @@ class Member extends BaseService
 
     public function getMember()
     {
+        $user = wei()->curUser;
         return wei()->member()->curApp()->notDeleted()->findOrInit(['user_id' => $user['id']]);
     }
 }

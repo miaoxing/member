@@ -4,9 +4,9 @@ namespace Miaoxing\Member\Service;
 
 use miaoxing\plugin\BaseModel;
 
-class MemberRecord extends BaseModel
+class MemberLevelRecord extends BaseModel
 {
-    protected $table = 'members';
+    protected $table = 'member_levels';
 
     protected $providers = [
         'db' => 'app.db',
@@ -25,14 +25,4 @@ class MemberRecord extends BaseModel
     protected $deletedAtColumn = 'deleted_at';
 
     protected $deletedByColumn = 'deleted_by';
-
-    public function user()
-    {
-        return $this->belongsTo('user');
-    }
-
-    public function memberLevel()
-    {
-        return $this->hasOne('memberLevel', 'id', 'level');
-    }
 }
