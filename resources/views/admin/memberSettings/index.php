@@ -19,17 +19,6 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="col-lg-2 control-label" for="enable-recharge">
-          <span class="text-warning">*</span>
-          开卡积分
-        </label>
-
-        <div class="col-lg-4">
-          <input class="js-member-init-score form-control" id="init-score" name="settings[member.init_score]">
-        </div>
-      </div>
-
       <div class="clearfix form-actions form-group">
         <div class="col-lg-offset-2">
           <button class="btn btn-primary" type="submit">
@@ -49,8 +38,7 @@
   require(['form', 'ueditor', 'validator'], function () {
     $('.js-setting-form')
       .loadJSON(<?= $setting->getFormJson([
-        'member.init_level' => 0,
-        'member.init_score' => 0
+        'member.init_level' => 0
       ]) ?>)
       .ajaxForm({
         dataType: 'json',
