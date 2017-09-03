@@ -26,6 +26,8 @@ class MemberRecord extends BaseModel
 
     protected $deletedByColumn = 'deleted_by';
 
+    protected $userIdColumn = 'user_id';
+
     public function user()
     {
         return $this->belongsTo('user');
