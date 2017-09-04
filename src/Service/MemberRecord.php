@@ -3,7 +3,12 @@
 namespace Miaoxing\Member\Service;
 
 use miaoxing\plugin\BaseModel;
+use Miaoxing\WechatCard\Service\WechatCardRecord;
 
+/**
+ * @property MemberLevelRecord $memberLevel
+ * @property WechatCardRecord $wechatCard
+ */
 class MemberRecord extends BaseModel
 {
     protected $table = 'members';
@@ -36,5 +41,15 @@ class MemberRecord extends BaseModel
     public function memberLevel()
     {
         return $this->hasOne('memberLevel', 'id', 'level');
+    }
+
+    public function wechatCard()
+    {
+        return $this->hasOne('wechatCard', 'wechat_id', 'wechat_card_id');
+    }
+
+    public function getImage()
+    {
+        return $this->memberLevel['image'] ?: $this->wechatCard['background_pic_url'];
     }
 }
