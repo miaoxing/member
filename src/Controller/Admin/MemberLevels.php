@@ -20,59 +20,65 @@ class MemberLevels extends BaseController
     {
         switch ($req['_format']) {
             case 'json':
-                $members = wei()->member()
+                $memberLevels = wei()->memberLevel()
                     ->curApp()
                     ->notDeleted();
 
-                $members
+                $memberLevels
                     ->limit($req['rows'])
                     ->page($req['page']);
-
-                if ($req['nick_name_user_id']) {
-                    $members->andWhere(['user_id' => $req['nick_name_user_id']]);
-                }
-
-                if ($req['mobile_user_id']) {
-                    $members->andWhere(['user_id' => $req['mobile_user_id']]);
-                }
-
-                if (wei()->isPresent($req['level'])) {
-                    $members->andWhere(['level' => $req['level']]);
-                }
-
-                if ($req['start_date']) {
-                    $members->andWhere('consumed_at >= ?', $req['start_date']);
-                }
-
-                if ($req['end_date']) {
-                    $members->andWhere('consumed_at <= ?', $req['end_date']);
-                }
 
                 // 排序
                 $sort = $req['sort'] ?: 'id';
                 $order = $req['order'] == 'asc' ? 'ASC' : 'DESC';
-                $members->orderBy($sort, $order);
+                $memberLevels->orderBy($sort, $order);
 
                 // 数据
-                $members->findAll()->load(['user', 'memberLevel']);
+                $memberLevels->findAll();
                 $data = [];
-                foreach ($members as $member) {
-                    $data[] = $member->toArray() + [
-                            'level_name' => $member->memberLevel['name'],
-                        ];
+                foreach ($memberLevels as $memberLevel) {
+                    $data[] = $memberLevel->toArray();
                 }
 
                 return $this->suc([
                     'data' => $data,
                     'page' => (int) $req['page'],
                     'rows' => (int) $req['rows'],
-                    'records' => $members->count(),
+                    'records' => $memberLevels->count(),
                 ]);
 
             default:
-                $levels = wei()->memberLevel()->curApp()->findAll();
-
                 return get_defined_vars();
         }
+    }
+
+    public function newAction($req)
+    {
+        return $this->editAction($req);
+    }
+
+    public function editAction($req)
+    {
+        $memberLevel = wei()->memberLevel()->curApp()->notDeleted()->findId($req['id']);
+
+        return get_defined_vars();
+    }
+
+    public function updateAction($req)
+    {
+        $memberLevel = wei()->memberLevel()->curApp()->notDeleted()->findId($req['id']);
+
+        $memberLevel->save($req);
+
+        return $this->suc();
+    }
+
+    public function destroyAction($req)
+    {
+        $memberLevel = wei()->memberLevel()->notDeleted()->findOneById($req['id']);
+
+        $memberLevel->softDelete();
+
+        return $this->suc();
     }
 }
