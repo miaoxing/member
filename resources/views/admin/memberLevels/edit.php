@@ -72,6 +72,17 @@ $view->layout();
         </div>
       </div>
 
+      <div class="form-group">
+        <label class="col-lg-2 control-label" for="discount">
+          背景图
+        </label>
+
+        <div class="js-upload-container col-lg-4">
+          <input type="file" class="js-image"/>
+          <input type="hidden" id="image" name="image" class="js-logo-url js-image-url"/>
+        </div>
+      </div>
+
       <div class="clearfix form-actions form-group">
         <input type="hidden" name="id" id="id">
 
@@ -97,7 +108,8 @@ $view->layout();
     'form',
     'validator',
     'plugins/app/libs/jquery.populate/jquery.populate',
-    'plugins/app/libs/jquery-toggle-display/jquery-toggle-display'
+    'plugins/app/libs/jquery-toggle-display/jquery-toggle-display',
+    'plugins/admin/js/image-input'
   ], function () {
     $.validator.addMethod('endScore', function (value, element) {
       return this.optional(element) || value == '0' || $('.js-start-score').val() < value;
@@ -121,6 +133,7 @@ $view->layout();
       })
       .validate();
 
+    $('.js-image').imageUploadInput();
     $('.js-special').toggleDisplay();
   });
 </script>
