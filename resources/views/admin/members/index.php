@@ -22,10 +22,10 @@ $view->layout();
               <input type="text" class="js-mobile form-control input-sm" id="mobile" name="mobile_user_id">
             </div>
 
-            <label class="col-md-1 control-label" for="level">等级：</label>
+            <label class="col-md-1 control-label" for="level-id">等级：</label>
 
             <div class="col-md-3">
-              <select name="level" id="level" class="form-control">
+              <select name="level_id" id="level-id" class="form-control">
                 <option value="">全部</option>
                 <option value="0">无</option>
                 <?php foreach ($levels as $level) : ?>

@@ -40,16 +40,28 @@ class MemberRecord extends BaseModel
 
     public function memberLevel()
     {
-        return $this->hasOne('memberLevel', 'id', 'level');
+        return $this->hasOne('memberLevel', 'id', 'level_id');
     }
 
     public function wechatCard()
     {
-        return $this->hasOne('wechatCard', 'wechat_id', 'wechat_card_id');
+        return $this->hasOne('wechatCard', 'id', 'card_id');
     }
 
     public function getImage()
     {
         return $this->memberLevel['image'] ?: $this->wechatCard['background_pic_url'];
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this['field_list'] = (array) json_decode($this['field_list'], true);
+    }
+
+    public function beforeSave()
+    {
+        parent::beforeSave();
+        $this['field_list'] = json_encode($this['field_list']);
     }
 }

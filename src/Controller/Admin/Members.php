@@ -36,8 +36,8 @@ class Members extends BaseController
                     $members->andWhere(['user_id' => $req['mobile_user_id']]);
                 }
 
-                if (wei()->isPresent($req['level'])) {
-                    $members->andWhere(['level' => $req['level']]);
+                if (wei()->isPresent($req['level_id'])) {
+                    $members->andWhere(['level_id' => $req['level_id']]);
                 }
 
                 if ($req['start_date']) {

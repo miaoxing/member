@@ -38,7 +38,7 @@
   require(['form', 'ueditor', 'validator'], function () {
     $('.js-setting-form')
       .loadJSON(<?= $setting->getFormJson([
-        'member.init_level' => 0
+        'member.init_level_id' => 0
       ]) ?>)
       .ajaxForm({
         dataType: 'json',
