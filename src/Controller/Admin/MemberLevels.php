@@ -26,12 +26,8 @@ class MemberLevels extends BaseController
 
                 $memberLevels
                     ->limit($req['rows'])
-                    ->page($req['page']);
-
-                // 排序
-                $sort = $req['sort'] ?: 'id';
-                $order = $req['order'] == 'asc' ? 'ASC' : 'DESC';
-                $memberLevels->orderBy($sort, $order);
+                    ->page($req['page'])
+                    ->desc('id');
 
                 // 数据
                 $memberLevels->findAll();

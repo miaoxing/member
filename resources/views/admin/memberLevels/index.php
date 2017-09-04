@@ -53,7 +53,7 @@ $view->layout();
             if (full.special == '1') {
               return '无'
             } else if (full.end_score == '0') {
-              return '> ' + full.start_score;
+              return '≥ ' + full.start_score;
             } else {
               return full.start_score + ' ~ ' + full.end_score;
             }
