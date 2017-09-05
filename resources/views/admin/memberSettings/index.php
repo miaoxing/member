@@ -5,13 +5,13 @@
     <form action="<?= $url('admin/member-settings/update') ?>" class="js-setting-form form-horizontal" method="post"
       role="form">
       <div class="form-group">
-        <label class="col-lg-2 control-label" for="init-level">
+        <label class="col-lg-2 control-label" for="init-level-id">
           <span class="text-warning">*</span>
           新卡的等级
         </label>
 
         <div class="col-lg-4">
-          <select class="js-member-init-level form-control" id="init-level" name="settings[member.init_level]">
+          <select class="js-member-init-level-id form-control" id="init-level-id" name="settings[member.init_level_id]">
             <?php foreach ($levels as $level) : ?>
               <option value="<?= $level['id'] ?>"><?= $level['name'] ?></option>
             <?php endforeach ?>
