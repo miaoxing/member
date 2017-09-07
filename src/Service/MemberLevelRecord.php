@@ -25,4 +25,18 @@ class MemberLevelRecord extends BaseModel
     protected $deletedAtColumn = 'deleted_at';
 
     protected $deletedByColumn = 'deleted_by';
+
+    public function afterSave()
+    {
+        wei()->cache->remove('member_levels:' . $this->app->getId());
+
+        parent::beforeSave();
+    }
+
+    public function afterDestroy()
+    {
+        wei()->cache->remove('member_levels:' . $this->app->getId());
+
+        parent::beforeSave();
+    }
 }

@@ -77,4 +77,11 @@ class MemberLevels extends BaseController
 
         return $this->suc();
     }
+
+    public function getLevelAction($req)
+    {
+        $level = wei()->memberLevel->getLevelByScore($req['score']);
+
+        return $this->suc(['data' => $level]);
+    }
 }

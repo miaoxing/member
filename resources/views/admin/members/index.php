@@ -98,7 +98,23 @@ $view->layout();
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="edit-level-id" class="col-lg-3 control-label">等级</label>
+              <label class="col-lg-3 control-label">当前等级</label>
+
+              <div class="col-lg-8">
+                <p class="form-control-static" name="level_name"></p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-lg-3 control-label">积分所属等级</label>
+
+              <div class="col-lg-8">
+                <p class="form-control-static" name="score_level_name"></p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-level-id" class="col-lg-3 control-label">更改为等级</label>
 
               <div class="col-lg-8">
                 <select class="js-level form-control" id="edit-level-id" name="level_id">
@@ -272,20 +288,41 @@ $view->layout();
       var data = $table.fnGetData($(this).closest('tr')[0]);
       var $modal = $(template.render('js-edit-level-modal'));
 
-      $modal.modal('show');
-      $modal.find('.js-edit-form')
-        .populate(data)
-        .ajaxForm({
-          dataType: 'json',
-          success: function (ret) {
-            $.msg(ret, function () {
-              if (ret.code === 1) {
-                $modal.modal('hide');
-                $table.reload();
-              }
-            });
-          }
-        });
+      $.ajax({
+        url: $.url('admin/member-levels/get-level.json'),
+        data: {score: data.score},
+        dataType: 'json',
+        success: function () {
+          // 屏蔽自动提示
+        }
+      }).done(function (ret) {
+        if (ret.code !== 1) {
+          $.msg(ret);
+          return;
+        }
+
+        if (ret.data) {
+          data.score_level_name = ret.data.name;
+          data.level_id = ret.data.id;
+        } else {
+          data.score_level_name = '无';
+        }
+
+        $modal.modal('show');
+        $modal.find('.js-edit-form')
+          .loadJSON(data)
+          .ajaxForm({
+            dataType: 'json',
+            success: function (ret) {
+              $.msg(ret, function () {
+                if (ret.code === 1) {
+                  $modal.modal('hide');
+                  $table.reload();
+                }
+              });
+            }
+          });
+      });
     });
   });
 </script>
