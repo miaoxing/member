@@ -75,4 +75,48 @@ class Members extends BaseController
                 return get_defined_vars();
         }
     }
+
+    public function updateLevelAction($req)
+    {
+        $member = wei()->member()->curApp()->findOneById($req['id']);
+        $level = $member->memberLevel;
+
+        $validator =wei()->validate([
+            'data' => $req,
+            'rules' => [
+                'level_id' => [
+                    'notEqualTo' => $member['level_id']
+                ],
+                'description' => []
+            ],
+            'names' => [
+                'level_id' => '等级',
+                'description' => '更改说明'
+            ],
+            'messages' => [
+                'level_id' => [
+                    'notEqualTo' => '%name%未改变'
+                ]
+            ]
+        ]);
+        if (!$validator->isValid()) {
+            return $this->err($validator->getFirstMessage());
+        }
+
+        $member->save([
+            'level_id' => $req['level_id'],
+        ]);
+        unset($member->memberLevel);
+        $newLevel = $member->memberLevel;
+
+        wei()->memberLog()->setAppId()->save([
+            'card_id' => $member['card_id'],
+            'user_id' => $member['user_id'],
+            'code' => $member['code'],
+            'action' => sprintf('将等级从"%s"更改为"%s"', $level['name'], $newLevel['name']),
+            'description' => $req['description']
+        ]);
+
+        return $this->suc();
+    }
 }

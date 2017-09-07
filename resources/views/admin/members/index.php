@@ -13,13 +13,15 @@ $view->layout();
             <label class="col-md-1 control-label" for="nick-name">昵称：</label>
 
             <div class="col-md-3">
-              <input type="text" class="js-nick-name form-control input-sm" id="nick-name" name="nick_name_user_id">
+              <input type="text" class="js-nick-name form-control input-sm" id="nick-name" name="nick_name_user_id"
+                placeholder="请输入昵称搜索">
             </div>
 
             <label class="col-md-1 control-label" for="mobile">手机号：</label>
 
             <div class="col-md-3">
-              <input type="text" class="js-mobile form-control input-sm" id="mobile" name="mobile_user_id">
+              <input type="text" class="js-mobile form-control input-sm" id="mobile" name="mobile_user_id"
+                placeholder="请输入手机号搜索">
             </div>
 
             <label class="col-md-1 control-label" for="level-id">等级：</label>
@@ -83,8 +85,55 @@ $view->layout();
 </div>
 <!-- /row -->
 
+<script id="js-edit-level-modal" type="text/html">
+  <div class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form class="js-edit-form form-horizontal" action="<%= $.url('admin/members/update-level') %>" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">编辑会员等级</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="edit-level-id" class="col-lg-3 control-label">等级</label>
+
+              <div class="col-lg-8">
+                <select class="js-level form-control" id="edit-level-id" name="level_id">
+                  <?php foreach ($levels as $level) : ?>
+                    <option value="<?= $level['id'] ?>"><?= $level['name'] ?></option>
+                  <?php endforeach ?>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-description" class="col-lg-3 control-label">
+                <span class="text-warning">*</span>
+                更改说明
+              </label>
+
+              <div class="col-lg-8">
+                <textarea class="form-control" id="edit-description" name="description"></textarea>
+              </div>
+            </div>
+
+            <input type="hidden" name="id" id="id">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script id="action-tpl" type="text/html">
-  <a href="<%= $.url('admin/members/%s/edit', id) %>">编辑</a>
+  <a class="js-edit-level" href="javascript:;">更改等级</a>
 </script>
 <?php require $view->getFile('@user/admin/user/richInfo.php') ?>
 
@@ -96,7 +145,8 @@ $view->layout();
     'comps/select2/select2.min',
     'css!comps/select2/select2',
     'css!comps/select2-bootstrap-css/select2-bootstrap',
-    'daterangepicker'
+    'daterangepicker',
+    'plugins/app/libs/jquery.populate/jquery.populate'
   ], function () {
     var $table = $('.js-member-table').dataTable({
       ajax: {
@@ -155,6 +205,7 @@ $view->layout();
       });
 
     $('.js-nick-name').select2({
+      allowClear: true,
       ajax: {
         url: $.url('admin/user.json'),
         dataType: 'json',
@@ -182,6 +233,7 @@ $view->layout();
     });
 
     $('.js-mobile').select2({
+      allowClear: true,
       ajax: {
         url: $.url('admin/user.json'),
         dataType: 'json',
@@ -214,6 +266,26 @@ $view->layout();
       $('.js-start-date').val(start.format(this.format));
       $('.js-end-date').val(end.format(this.format));
       this.element.trigger('change');
+    });
+
+    $table.on('click', '.js-edit-level', function () {
+      var data = $table.fnGetData($(this).closest('tr')[0]);
+      var $modal = $(template.render('js-edit-level-modal'));
+
+      $modal.modal('show');
+      $modal.find('.js-edit-form')
+        .populate(data)
+        .ajaxForm({
+          dataType: 'json',
+          success: function (ret) {
+            $.msg(ret, function () {
+              if (ret.code === 1) {
+                $modal.modal('hide');
+                $table.reload();
+              }
+            });
+          }
+        });
     });
   });
 </script>
