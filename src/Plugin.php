@@ -42,6 +42,12 @@ class Plugin extends BasePlugin
             'name' => '会员等级',
         ];
 
+        $navs[] = [
+            'parentId' => 'member',
+            'url' => 'admin/member-logs',
+            'name' => '会员日志',
+        ];
+
         $subCategories['member-setting'] = [
             'parentId' => 'member',
             'name' => '设置',
