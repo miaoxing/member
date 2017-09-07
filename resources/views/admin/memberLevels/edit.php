@@ -32,34 +32,25 @@ $view->layout();
             <label>
               <input name="special" type="hidden" value="0" data-populate-ignore>
               <input class="js-special" id="special" name="special" type="checkbox" value="1"
-                data-reverse-target=".js-range-form-group" data-value=":checked">
+                data-reverse-target=".js-score-form-group" data-value=":checked">
             </label>
           </div>
         </div>
 
         <label class="col-lg-4 help-text">
-          特殊等级没有积分范围,需手工设定会员为该等级
+          特殊等级没有积分要求,需手工设定会员为该等级
         </label>
       </div>
 
-      <div class="js-range-form-group form-group">
-        <label class="col-lg-2 control-label" for="start-score">
-          积分范围
+      <div class="js-score-form-group form-group">
+        <label class="col-lg-2 control-label" for="score">
+          要求积分
         </label>
 
         <div class="col-lg-4">
-          <div class="input-group">
-            <input class="js-start-score form-control text-center" id="start-score" name="start_score" type="text"
-              data-rule-required="true">
-            <span class="input-group-addon">~</span>
-            <input class="js-end-score form-control text-center" id="end-score" name="end_score" type="text"
-              data-rule-required="true" data-rule-endScore="true">
-          </div>
+          <input class="js-score form-control" id="score" name="score" type="text"
+            data-rule-required="true" data-rule-number="true">
         </div>
-
-        <label class="col-lg-4 help-text" for="end-score">
-          最大积分填0表示无上限
-        </label>
       </div>
 
       <div class="form-group">
@@ -73,7 +64,7 @@ $view->layout();
       </div>
 
       <div class="form-group">
-        <label class="col-lg-2 control-label" for="discount">
+        <label class="col-lg-2 control-label" for="image">
           背景图
         </label>
 
@@ -81,6 +72,10 @@ $view->layout();
           <input type="file" class="js-image"/>
           <input type="hidden" id="image" name="image" class="js-logo-url js-image-url"/>
         </div>
+
+        <label class="col-lg-4" for="image">
+          留空展示会员卡背景图
+        </label>
       </div>
 
       <div class="clearfix form-actions form-group">
@@ -111,10 +106,6 @@ $view->layout();
     'plugins/app/libs/jquery-toggle-display/jquery-toggle-display',
     'plugins/admin/js/image-input'
   ], function () {
-    $.validator.addMethod('endScore', function (value, element) {
-      return this.optional(element) || value == '0' || $('.js-start-score').val() < value;
-    }, '最大积分需大于最小积分或为0');
-
     $('.js-member-level-form')
       .populate(<?= $memberLevel->toJson() ?>)
       .ajaxForm({

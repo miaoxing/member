@@ -15,7 +15,7 @@ $view->layout();
         <thead>
         <tr>
           <th>名称</th>
-          <th>积分范围</th>
+          <th>积分要求</th>
           <th>折扣</th>
           <th>特殊</th>
           <th class="t-8">操作</th>
@@ -48,14 +48,12 @@ $view->layout();
           data: 'name'
         },
         {
-          data: 'start_score',
+          data: 'score',
           render: function (data, type, full) {
             if (full.special == '1') {
               return '无'
-            } else if (full.end_score == '0') {
-              return '≥ ' + full.start_score;
             } else {
-              return full.start_score + ' ~ ' + full.end_score;
+              return '≥ ' + full.score;
             }
           }
         },
