@@ -4,9 +4,12 @@ namespace Miaoxing\Member\Service;
 
 use miaoxing\plugin\BaseService;
 use Miaoxing\Plugin\Service\User;
+use Wei\RetTrait;
 
 class Member extends BaseService
 {
+    use RetTrait;
+
     protected $members = [];
 
     public function __invoke()
@@ -17,6 +20,7 @@ class Member extends BaseService
     /**
      * @param User $user
      * @return MemberRecord
+     * @todo 优先获取默认的会员卡?
      */
     public function getMember($user = null)
     {
