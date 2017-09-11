@@ -3,6 +3,7 @@
 namespace Miaoxing\Member\Controller\Admin;
 
 use miaoxing\plugin\BaseController;
+use Miaoxing\WechatCard\Service\WechatCardRecord;
 
 class MemberSettings extends BaseController
 {
@@ -16,6 +17,11 @@ class MemberSettings extends BaseController
 
     public function indexAction()
     {
+        $cards = wei()->wechatCard()
+            ->curApp()
+            ->notDeleted()
+            ->andWhere(['type' => WechatCardRecord::TYPE_MEMBER_CARD]);
+
         $levels = wei()->memberLevel()->curApp()->findAll();
 
         return get_defined_vars();

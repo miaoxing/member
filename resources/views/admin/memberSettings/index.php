@@ -5,17 +5,40 @@
     <form action="<?= $url('admin/member-settings/update') ?>" class="js-setting-form form-horizontal" method="post"
       role="form">
       <div class="form-group">
+        <label class="col-lg-2 control-label" for="default-card-id">
+          <span class="text-warning">*</span>
+          默认会员卡
+        </label>
+
+        <div class="col-lg-4">
+          <?php if ($cards->length()) : ?>
+            <select class="js-member-default-card-id form-control" id="default-card-id" name="settings[member.default_card_id]">
+              <?php foreach ($cards as $card) : ?>
+                <option value="<?= $card['id'] ?>"><?= $card['title'] ?></option>
+              <?php endforeach ?>
+            </select>
+          <?php else: ?>
+            <p class="form-control-static">暂无会员卡</p>
+          <?php endif ?>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label class="col-lg-2 control-label" for="init-level-id">
           <span class="text-warning">*</span>
           新卡的等级
         </label>
 
         <div class="col-lg-4">
-          <select class="js-member-init-level-id form-control" id="init-level-id" name="settings[member.init_level_id]">
-            <?php foreach ($levels as $level) : ?>
-              <option value="<?= $level['id'] ?>"><?= $level['name'] ?></option>
-            <?php endforeach ?>
-          </select>
+          <?php if ($levels->length()) : ?>
+            <select class="js-member-init-level-id form-control" id="init-level-id" name="settings[member.init_level_id]">
+              <?php foreach ($levels as $level) : ?>
+                <option value="<?= $level['id'] ?>"><?= $level['name'] ?></option>
+              <?php endforeach ?>
+            </select>
+          <?php else : ?>
+            <p class="form-control-static">暂未等级</p>
+          <?php endif ?>
         </div>
       </div>
 
@@ -38,6 +61,7 @@
   require(['form', 'ueditor', 'validator'], function () {
     $('.js-setting-form')
       .loadJSON(<?= $setting->getFormJson([
+        'member.default_card_id' => 0,
         'member.init_level_id' => 0,
       ]) ?>)
       .ajaxForm({
