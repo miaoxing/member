@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Member;
 
+use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 
 class Plugin extends BasePlugin
@@ -60,6 +61,11 @@ class Plugin extends BasePlugin
             'url' => 'admin/member-settings',
             'name' => '功能设置',
         ];
+    }
+
+    public function onAsyncPostOrderPay(Order $order)
+    {
+
     }
 }
 
