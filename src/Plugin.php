@@ -65,7 +65,5 @@ class Plugin extends BasePlugin
 
     public function onAsyncPostOrderPay(Order $order)
     {
-
     }
 }
-
