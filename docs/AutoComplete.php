@@ -8,6 +8,8 @@ namespace plugins\member\docs {
     use Miaoxing\Member\Service\MemberLog;
     use Miaoxing\Member\Service\MemberLogRecord;
     use Miaoxing\Member\Service\MemberRecord;
+    use Miaoxing\Member\Service\MemberScoreLog;
+    use Miaoxing\Member\Service\MemberScoreLogRecord;
 
     /**
      * @property    Member $member 会员
