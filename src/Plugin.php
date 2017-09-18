@@ -6,6 +6,7 @@ use Miaoxing\Member\Service\MemberRecord;
 use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
+use Miaoxing\Refund\Service\Refund;
 use Wei\RetTrait;
 
 class Plugin extends BasePlugin
@@ -142,29 +143,60 @@ class Plugin extends BasePlugin
 
         $data = [];
         if ($level['image']) {
-            $data['background_pic_url'] = $level['image'];
+            $ret = wei()->wechatMedia->updateUrlToWechatUrlRet($level['image']);
+            if ($ret['code'] === 1) {
+                $data['background_pic_url'] = $data['url'];
+            }
         }
 
         return $data;
     }
 
     /**
-     * 下单后增加积分
+     * 退款后退还积分
+     *
+     * @param Refund $refund
      */
-    public function onOrderPay()
+    public function onPostRefund(Refund $refund)
     {
+        $user = $refund->getUser();
+        $member = wei()->member->getMember($user);
+        if ($member->isNew()) {
+            return;
+        }
 
+        $card = $member->wechatCard;
+        $score = $card->calScore($refund['fee']);
+        if (!$score) {
+            return;
+        }
+
+        wei()->score->changeScore(-$score, [
+            'description' => sprintf('退款%s元，扣除%s积分', $refund['fee'], $score)
+        ], $user);
     }
 
     /**
-     * 退款后退还积分
+     * 下单后增加积分
+     *
+     * @param Order $order
      */
-    public function onRefund()
-    {
-
-    }
-
     public function onAsyncPostOrderPay(Order $order)
     {
+        $user = $order->getUser();
+        $member = wei()->member->getMember($user);
+        if ($member->isNew()) {
+            return;
+        }
+
+        $card = $member->wechatCard;
+        $score = $card->calScore($order['amount']);
+        if (!$score) {
+            return;
+        }
+
+        wei()->score->changeScore($score, [
+            'description' => sprintf('消费%s元，获得%s积分', $order['amount'], $score)
+        ], $user);
     }
 }
