@@ -3,11 +3,13 @@
 namespace Miaoxing\Member\Service;
 
 use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\Service\User;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
 
 /**
  * @property MemberLevelRecord $memberLevel
  * @property WechatCardRecord $wechatCard
+ * @property User $user
  */
 class MemberRecord extends BaseModel
 {

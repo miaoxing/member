@@ -4,9 +4,13 @@ namespace Miaoxing\Member;
 
 use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
+use Miaoxing\Plugin\Service\User;
+use Wei\RetTrait;
 
 class Plugin extends BasePlugin
 {
+    use RetTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -61,6 +65,46 @@ class Plugin extends BasePlugin
             'url' => 'admin/member-settings',
             'name' => '功能设置',
         ];
+    }
+
+    /**
+     * 更改积分后,同步到用户会员卡
+     *
+     * @param User $user
+     * @param int $score
+     * @param string $remark
+     * @return array
+     */
+    public function onPostScoreChange(User $user, $score, $remark)
+    {
+        $member = wei()->member->getMember($user);
+        if ($member->isNew()) {
+            return $this->err('用户没有会员卡');
+        }
+
+        $member->incr('score', $score);
+        if ($score > 0) {
+            $member->incr('total_score', $score);
+        } else {
+            $member->incr('used_score', -$score);
+        }
+        $member->save();
+    }
+
+    /**
+     * 下单后增加积分
+     */
+    public function onOrderPay()
+    {
+
+    }
+
+    /**
+     * 退款后退还积分
+     */
+    public function onRefund()
+    {
+
     }
 
     public function onAsyncPostOrderPay(Order $order)
