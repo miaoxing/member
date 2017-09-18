@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Member;
 
+use Miaoxing\Member\Service\MemberRecord;
 use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
@@ -89,6 +90,62 @@ class Plugin extends BasePlugin
             $member->incr('used_score', -$score);
         }
         $member->save();
+    }
+
+    public function onAsyncPostScoreChange($data)
+    {
+        // 如果没有会员卡,不用通知
+        $user = wei()->user()->findById($data['user_id']);
+        $member = wei()->member->getMember($user);
+        if ($member->isNew()) {
+            return;
+        }
+
+        $apiData = [
+            'code' => $member['code'],
+            'card_id' => $member['card_wechat_id'],
+            'record_bonus' => $data['data']['description'],
+            'bonus' => $member['score'],
+            'add_bonus' => $data['score'],
+        ];
+
+        // 按需更新等级
+        $extraData = $this->updateMemberLevel($member);
+        if ($extraData) {
+            $apiData += $extraData;
+        }
+
+        $api = wei()->wechatAccount->getCurrentAccount()->createApiService();
+        $api->updateMemberCardUser($apiData);
+    }
+
+    /**
+     * 按需更新等级,并返回微信接口所需的资料
+     *
+     * @param MemberRecord $member
+     * @return array
+     */
+    protected function updateMemberLevel(MemberRecord $member)
+    {
+        // 如果指定了等级,暂不用更新
+        if ($member['is_specified_level']) {
+            return [];
+        }
+
+        $level = wei()->memberLevel->getLevelByScore($member['score']);
+        if ($level['id'] == $member['level_id']) {
+            return [];
+        }
+
+        $member['level_id'] = $level['id'];
+        $member->save();
+
+        $data = [];
+        if ($level['image']) {
+            $data['background_pic_url'] = $level['image'];
+        }
+
+        return $data;
     }
 
     /**

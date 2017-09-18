@@ -103,8 +103,13 @@ class Members extends BaseController
             return $this->err($validator->getFirstMessage());
         }
 
+        // 判断是否指定了和积分范围不一致的等级
+        $realLevelId = wei()->memberLevel->getLevelByScore($member['score']);
+        $isSpecifiedLevel = $realLevelId == $req['level_id'];
+
         $member->save([
             'level_id' => $req['level_id'],
+            'is_specified_level' => $isSpecifiedLevel,
         ]);
         unset($member->memberLevel);
         $newLevel = $member->memberLevel;
