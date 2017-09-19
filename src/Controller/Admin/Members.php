@@ -82,23 +82,23 @@ class Members extends BaseController
         $member = wei()->member()->curApp()->findOneById($req['id']);
         $level = $member->memberLevel;
 
-        $validator =wei()->validate([
+        $validator = wei()->validate([
             'data' => $req,
             'rules' => [
                 'level_id' => [
-                    'notEqualTo' => $member['level_id']
+                    'notEqualTo' => $member['level_id'],
                 ],
-                'description' => []
+                'description' => [],
             ],
             'names' => [
                 'level_id' => '等级',
-                'description' => '更改说明'
+                'description' => '更改说明',
             ],
             'messages' => [
                 'level_id' => [
-                    'notEqualTo' => '%name%未改变'
-                ]
-            ]
+                    'notEqualTo' => '%name%未改变',
+                ],
+            ],
         ]);
         if (!$validator->isValid()) {
             return $this->err($validator->getFirstMessage());
@@ -120,7 +120,7 @@ class Members extends BaseController
             'user_id' => $member['user_id'],
             'code' => $member['code'],
             'action' => sprintf('将等级从"%s"更改为"%s"', $level['name'], $newLevel['name']),
-            'description' => $req['description']
+            'description' => $req['description'],
         ]);
 
         return $this->suc();
