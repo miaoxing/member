@@ -159,7 +159,7 @@ class Plugin extends BasePlugin
      *
      * @param Refund $refund
      */
-    public function onPostRefund(Refund $refund)
+    public function onAsyncRefundRefund(Refund $refund)
     {
         $user = $refund->getUser();
         $member = wei()->member->getMember($user);
