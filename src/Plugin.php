@@ -7,6 +7,8 @@ use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Refund\Service\Refund;
+use Miaoxing\WechatCard\Service\UserWechatCardRecord;
+use Miaoxing\WechatCard\Service\WechatCardRecord;
 use Wei\RetTrait;
 
 class Plugin extends BasePlugin
@@ -198,5 +200,39 @@ class Plugin extends BasePlugin
         wei()->score->changeScore($score, [
             'description' => sprintf('消费%s元，获得%s积分', $order['amount'], $score)
         ], $user);
+    }
+
+    /**
+     * 领卡后,更新会员卡中记录的卡券数量
+     *
+     * @param WechatCardRecord $card
+     */
+    public function onPostWechatUserGetCard(WechatCardRecord $card)
+    {
+        if ($card['type'] == WechatCardRecord::TYPE_MEMBER_CARD) {
+            return;
+        }
+
+        $member = wei()->member->getMember();
+        if ($member->isNew()) {
+            return;
+        }
+
+        $member->incr('total_card_count', 1)
+            ->incr('card_count', 1)
+            ->save();
+    }
+
+    public function onPostWechatUserConsumeCard(UserWechatCardRecord $userCard)
+    {
+        $member = wei()->member->getMember();
+        if ($member->isNew()) {
+            return;
+        }
+
+        // TODO 其他场景也减少?
+        $member->decr('card_count', 1)
+            ->incr('used_card_count', 1)
+            ->save();
     }
 }
