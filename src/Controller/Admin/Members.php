@@ -58,6 +58,7 @@ class Members extends BaseController
                 $data = [];
                 foreach ($members as $member) {
                     $data[] = $member->toArray() + [
+                            'user' => $member->user,
                             'level_name' => $member->memberLevel['name'],
                         ];
                 }

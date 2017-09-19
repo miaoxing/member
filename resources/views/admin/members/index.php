@@ -172,7 +172,7 @@ $view->layout();
         {
           data: 'id',
           render: function (data, type, full) {
-            return template.render('user-info-tpl', full);
+            return template.render('user-info-tpl', full.user);
           }
         },
         {
