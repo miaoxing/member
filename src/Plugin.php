@@ -174,7 +174,7 @@ class Plugin extends BasePlugin
         }
 
         wei()->score->changeScore(-$score, [
-            'description' => sprintf('退款%s元，扣除%s积分', $refund['fee'], $score)
+            'description' => sprintf('退款%s元，扣除%s积分', $refund['fee'], $score),
         ], $user);
     }
 
@@ -198,7 +198,7 @@ class Plugin extends BasePlugin
         }
 
         wei()->score->changeScore($score, [
-            'description' => sprintf('消费%s元，获得%s积分', $order['amount'], $score)
+            'description' => sprintf('消费%s元，获得%s积分', $order['amount'], $score),
         ], $user);
     }
 
