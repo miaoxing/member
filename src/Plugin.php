@@ -10,6 +10,7 @@ use Miaoxing\Refund\Service\Refund;
 use Miaoxing\WechatCard\Service\UserWechatCardRecord;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
 use Wei\RetTrait;
+use Wei\WeChatApp;
 
 class Plugin extends BasePlugin
 {
@@ -231,6 +232,39 @@ class Plugin extends BasePlugin
         }
 
         // TODO 其他场景也减少?
+        $member->decr('card_count', 1)
+            ->incr('used_card_count', 1)
+            ->save();
+    }
+
+    /**
+     * 用户赠送了卡,将自己的
+     *
+     * @param WeChatApp $app
+     * @param User $user
+     */
+    public function onWechatUserGetCard(WeChatApp $app, User $user)
+    {
+        if (!$app->getAttr('IsGiveByFriend')) {
+            return;
+        }
+
+        /** @var WechatCardRecord $card */
+        $card = wei()->wechatCard()->find(['wechat_id' => $app->getAttr('CardId')]);
+        if (!$card) {
+            return;
+        }
+
+        if ($card['type'] == WechatCardRecord::TYPE_MEMBER_CARD) {
+            return;
+        }
+
+        $user = wei()->user()->find(['wechatOpenId' => $app->getAttr('FriendUserName')]);
+        $member = wei()->member->getMember($user);
+        if ($member->isNew()) {
+            return;
+        }
+
         $member->decr('card_count', 1)
             ->incr('used_card_count', 1)
             ->save();
