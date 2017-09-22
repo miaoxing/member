@@ -132,7 +132,7 @@ class Plugin extends BasePlugin
             return;
         }
 
-        $url = wei()->url('wechat-cards');
+        $url = wei()->url->full('wechat-cards');
         $account = wei()->wechatAccount->getCurrentAccount();
         $account->sendTemplate($user, $tplId, $this->getChangeScoreTplData($user, $data), $url);
     }
