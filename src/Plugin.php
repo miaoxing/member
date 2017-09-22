@@ -284,40 +284,6 @@ class Plugin extends BasePlugin
             return;
         }
 
-        // TODO 其他场景也减少?
-        $member->decr('card_count', 1)
-            ->incr('used_card_count', 1)
-            ->save();
-    }
-
-    /**
-     * 用户赠送了卡,将自己的
-     *
-     * @param WeChatApp $app
-     * @param User $user
-     */
-    public function onWechatUserGetCard(WeChatApp $app, User $user)
-    {
-        if (!$app->getAttr('IsGiveByFriend')) {
-            return;
-        }
-
-        /** @var WechatCardRecord $card */
-        $card = wei()->wechatCard()->find(['wechat_id' => $app->getAttr('CardId')]);
-        if (!$card) {
-            return;
-        }
-
-        if ($card['type'] == WechatCardRecord::TYPE_MEMBER_CARD) {
-            return;
-        }
-
-        $user = wei()->user()->find(['wechatOpenId' => $app->getAttr('FriendUserName')]);
-        $member = wei()->member->getMember($user);
-        if ($member->isNew()) {
-            return;
-        }
-
         $member->decr('card_count', 1)
             ->incr('used_card_count', 1)
             ->save();
@@ -335,9 +301,15 @@ class Plugin extends BasePlugin
             return;
         }
 
-        $method = $app->getAttr('IsReturnBack') ? 'incr' : 'decr';
-        $member->$method('total_card_count', 1)
-            ->$method('card_count', 1)
-            ->save();
+        if (!$app->getAttr('IsReturnBack')) {
+            // 转赠也是使用了该卡券,所以使用数增加,可用数减少
+            $member->incr('used_card_count', 1)
+                ->decr('card_count', 1);
+        } else {
+            // 退回则反之
+            $member->incr('card_count', 1)
+                ->decr('used_card_count', 1);
+        }
+        $member->save();
     }
 }
