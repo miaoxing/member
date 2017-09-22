@@ -122,7 +122,6 @@ class Plugin extends BasePlugin
         $api = wei()->wechatAccount->getCurrentAccount()->createApiService();
         $api->updateMemberCardUser($apiData);
 
-
         $this->sendChangeScoreTemplateMsg($user, $data);
     }
 
