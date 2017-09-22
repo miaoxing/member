@@ -322,4 +322,22 @@ class Plugin extends BasePlugin
             ->incr('used_card_count', 1)
             ->save();
     }
+
+    public function onWechatUserGiftingCard(WeChatApp $app, User $user)
+    {
+        $member = wei()->member->getMember($user);
+        if ($member->isNew()) {
+            return;
+        }
+
+        $userCard = wei()->userWechatCard->getByCodeFromCache($app->getAttr('UserCardCode'));
+        if (!$userCard) {
+            return;
+        }
+
+        $method = $app->getAttr('IsReturnBack') ? 'incr' : 'decr';
+        $member->$method('total_card_count', 1)
+            ->$method('card_count', 1)
+            ->save();
+    }
 }

@@ -66,4 +66,10 @@ class MemberRecord extends BaseModel
         parent::beforeSave();
         $this['field_list'] = json_encode($this['field_list']);
     }
+
+    public function afterSave()
+    {
+        parent::afterSave();
+        $this['field_list'] = (array) json_decode($this['field_list'], true);
+    }
 }
