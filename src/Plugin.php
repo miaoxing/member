@@ -24,7 +24,7 @@ class Plugin extends BasePlugin
     /**
      * {@inheritdoc}
      */
-    protected $description = '包括会员卡等';
+    protected $description = '基于微信会员卡的会员系统';
 
     public function onAdminNavGetNavs(&$navs, &$categories, &$subCategories)
     {
