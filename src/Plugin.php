@@ -3,6 +3,7 @@
 namespace Miaoxing\Member;
 
 use Miaoxing\Member\Service\MemberRecord;
+use Miaoxing\Member\Service\MemberStatLogRecord;
 use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
@@ -245,6 +246,8 @@ class Plugin extends BasePlugin
             return;
         }
 
+        $this->updateFirstConsume($member, $order);
+
         $card = $member->wechatCard;
         $score = $card->calScore($order['amount']);
         if (!$score) {
@@ -254,6 +257,26 @@ class Plugin extends BasePlugin
         wei()->score->changeScore($score, [
             'description' => sprintf('消费%s元，获得%s积分', $order['amount'], $score),
         ], $user);
+    }
+
+    /**
+     * 更新会员的首次消费时间
+     *
+     * @param MemberRecord $member
+     * @param Order $order
+     */
+    public function updateFirstConsume(MemberRecord $member, Order $order)
+    {
+        if ($member['consumed_at'] && $member['consumed_at'] != '0000-00-00 00:00:00') {
+            return;
+        }
+
+        $member->save(['consumed_at' => $order['payTime']]);
+
+        wei()->memberStatLog()->setAppId()->save([
+            'card_id' => $member['card_id'],
+            'action' => MemberStatLogRecord::ACTION_FIRST_CONSUME,
+        ]);
     }
 
     /**
@@ -311,5 +334,61 @@ class Plugin extends BasePlugin
                 ->decr('used_card_count', 1);
         }
         $member->save();
+    }
+
+    /**
+     * 用户领取会员卡
+     *
+     * @param WeChatApp $app
+     * @param User $user
+     */
+    public function onWechatUserGetCard(WeChatApp $app, User $user)
+    {
+        $this->logger->info('收到领卡事件', $app->getAttrs());
+
+        $card = wei()->wechatCard()->find(['wechat_id' => $app->getAttr('CardId')]);
+        if (!$card || $card['type'] != WechatCardRecord::TYPE_MEMBER_CARD) {
+            return;
+        }
+
+        $member = wei()->member()->curApp()->findOrInit([
+            'card_id' => $card['id'],
+            'user_id' => $user['id'],
+        ]);
+        if (!$member->isNew()) {
+            $this->logger->info('用户已有会员卡', $app->getAttrs());
+
+            return;
+        }
+
+        // 如果是赠送,设置原来的卡号为无效
+        if ($app->getAttr('IsGiveByFriend')) {
+            $friendMember = wei()->member()->find(['card_code' => $app->getAttr('OldUserCardCode')]);
+            /** @var MemberRecord $friendMember */
+            if ($friendMember) {
+                $friendMember->softDelete();
+            } else {
+                $this->logger->warning('找不到赠送用户的原始会员卡', $app->getAttrs());
+            }
+        }
+
+        /** @var MemberRecord $member */
+        $member->save([
+            'card_id' => $card['id'],
+            'card_wechat_id' => $card['wechat_id'],
+            'code' => $app->getAttr('UserCardCode'),
+            'wechat_open_id' => $user['wechatOpenId'],
+            'is_give_by_friend' => $app->getAttr('IsGiveByFriend'),
+            'friend_user_name' => (string) $app->getAttr('FriendUserName'),
+            'outer_str' => (string) $app->getAttr('OuterStr'),
+            'level_id' => wei()->setting->getValue('member.init_level_id', 0),
+            'score' => (int) $card['bonus_rule']['init_increase_bonus'],
+            'total_score' => (int) $card['bonus_rule']['init_increase_bonus'],
+        ]);
+
+        wei()->memberStatLog()->setAppId()->save([
+            'card_id' => $member['card_id'],
+            'action' => MemberStatLogRecord::ACTION_RECEIVE,
+        ]);
     }
 }
