@@ -122,59 +122,6 @@ class Plugin extends BasePlugin
 
         $api = wei()->wechatAccount->getCurrentAccount()->createApiService();
         $api->updateMemberCardUser($apiData);
-
-        $this->sendChangeScoreTemplateMsg($user, $data);
-    }
-
-    protected function sendChangeScoreTemplateMsg(User $user, $data)
-    {
-        $tplId = wei()->setting('member.changeScoreTplId');
-        if (!$tplId) {
-            return;
-        }
-
-        $url = wei()->url->full('wechat-cards');
-        $account = wei()->wechatAccount->getCurrentAccount();
-        $account->sendTemplate($user, $tplId, $this->getChangeScoreTplData($user, $data), $url);
-    }
-
-    /**
-     * {{first.DATA}}
-     * 会员姓名：{{keyword1.DATA}}
-     * 会员账号：{{keyword2.DATA}}
-     * 积分变更：{{keyword3.DATA}}
-     * 剩余积分：{{keyword4.DATA}}
-     * {{remark.DATA}}
-     *
-     * @param User $user
-     * @param $data
-     * @return array
-     */
-    protected function getChangeScoreTplData(User $user, $data)
-    {
-        $member = wei()->member->getMember($user);
-
-        return [
-            'first' => [
-                'value' => '您好，您的会员积分信息有了新的变更。',
-            ],
-            'keyword1' => [
-                'value' => $user->getNickName(),
-            ],
-            'keyword2' => [
-                'value' => $member['code'],
-            ],
-            'keyword3' => [
-                'value' => $data['data']['description'],
-            ],
-            'keyword4' => [
-                'value' => $member['score'],
-            ],
-            'remark' => [
-                'value' => '点击查看详情',
-                'color' => '#44b549',
-            ],
-        ];
     }
 
     /**
