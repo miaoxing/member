@@ -14,4 +14,3 @@ class UserGetMemberCard extends Job
         $job->delete();
     }
 }
-

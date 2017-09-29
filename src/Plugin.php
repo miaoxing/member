@@ -9,7 +9,6 @@ use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Refund\Service\Refund;
-use Miaoxing\Score\Service\ScoreLogRecord;
 use Miaoxing\WechatCard\Service\UserWechatCardRecord;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
 use Wei\RetTrait;
@@ -337,7 +336,7 @@ class Plugin extends BasePlugin
         wei()->queue->push(UserGetMemberCard::className(), [
             'member_id' => $member['id'],
             'card_id' => $card['id'],
-            'attrs' => $app->getAttrs()
+            'attrs' => $app->getAttrs(),
         ], wei()->app->getNamespace());
     }
 
