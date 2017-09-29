@@ -107,54 +107,7 @@ class Plugin extends BasePlugin
             return;
         }
 
-        $apiData = [
-            'code' => $member['code'],
-            'card_id' => $member['card_wechat_id'],
-            'record_bonus' => $data['data']['description'],
-            'bonus' => $member['score'],
-            'add_bonus' => $data['score'],
-        ];
-
-        // 按需更新等级
-        $extraData = $this->updateMemberLevel($member);
-        if ($extraData) {
-            $apiData += $extraData;
-        }
-
-        $api = wei()->wechatAccount->getCurrentAccount()->createApiService();
-        $api->updateMemberCardUser($apiData);
-    }
-
-    /**
-     * 按需更新等级,并返回微信接口所需的资料
-     *
-     * @param MemberRecord $member
-     * @return array
-     */
-    protected function updateMemberLevel(MemberRecord $member)
-    {
-        // 如果指定了等级,暂不用更新
-        if ($member['is_specified_level']) {
-            return [];
-        }
-
-        $level = wei()->memberLevel->getLevelByScore($member['score']);
-        if ($level['id'] == $member['level_id']) {
-            return [];
-        }
-
-        $member['level_id'] = $level['id'];
-        $member->save();
-
-        $data = [];
-        if ($level['image']) {
-            $ret = wei()->wechatMedia->updateUrlToWechatUrlRet($level['image']);
-            if ($ret['code'] === 1) {
-                $data['background_pic_url'] = $data['url'];
-            }
-        }
-
-        return $data;
+        $member->notifyScoreChange($data['score'], $data['data']);
     }
 
     /**
@@ -223,6 +176,7 @@ class Plugin extends BasePlugin
 
         wei()->memberStatLog()->setAppId()->save([
             'card_id' => $member['card_id'],
+            'user_id' => $member['user_id'],
             'action' => MemberStatLogRecord::ACTION_FIRST_CONSUME,
             'created_date' => date('Y-m-d'),
         ]);
@@ -305,12 +259,11 @@ class Plugin extends BasePlugin
             'code' => $app->getAttr('UserCardCode'),
         ]);
 
-        // 新卡则初始化等级和积分等
-        if ($member->isNew()) {
+        // 新卡则初始化等级等
+        $isNew = $member->isNew();
+        if ($isNew) {
             $member->fromArray([
                 'level_id' => wei()->setting->getValue('member.init_level_id', 0),
-                'score' => (int) $card['bonus_rule']['init_increase_bonus'],
-                'total_score' => (int) $card['bonus_rule']['init_increase_bonus'],
             ]);
         }
 
@@ -337,6 +290,8 @@ class Plugin extends BasePlugin
         wei()->queue->push(UserGetMemberCard::className(), [
             'member_id' => $member['id'],
             'card_id' => $card['id'],
+            'user_id' => $user['id'],
+            'is_new' => $isNew,
             'attrs' => $app->getAttrs(),
         ], wei()->app->getNamespace());
     }
@@ -362,13 +317,25 @@ class Plugin extends BasePlugin
         // 2. 记录统计数据
         wei()->memberStatLog()->setAppId()->save([
             'card_id' => $data['card_id'],
+            'user_id' => $data['user_id'],
             'action' => MemberStatLogRecord::ACTION_RECEIVE,
             'created_date' => date('Y-m-d'),
         ]);
 
-        // 3. 更新会员卡的积分,卡券数据
+        // 3. 如果是新卡,发放赠送的积分
         /** @var MemberRecord $member */
         $member = wei()->member()->findById($data['member_id']);
+        if ($data['is_new']) {
+            $card = wei()->wechatCard()->findById($data['card_id']);
+            if ($card['bonus_rule']['init_increase_bonus']) {
+                wei()->score->changeScore($card['bonus_rule']['init_increase_bonus'], [
+                    'description' => '开卡赠送',
+                    'card_code' => $member['code'],
+                ], $member->user);
+            }
+        }
+
+        // 4. 将用户的积分,卡券数据同步到会员卡中
         $member->syncCountData();
     }
 

@@ -81,8 +81,9 @@ class MemberRecord extends BaseModel
      */
     public function syncCountData()
     {
-        $user = $this->user;
+        $this->loadCardCount();
 
+        $user = $this->user;
         $score = wei()->score->getScore($user);
         $usedScore = wei()->scoreLog()
             ->curApp()
@@ -92,19 +93,98 @@ class MemberRecord extends BaseModel
                 'action' => ScoreLogRecord::ACTION_SUB,
             ]);
 
+        // 对比出积分差异
+        $changeScore = $score - $this['score'];
+        if ($changeScore) {
+            $this->notifyScoreChange($changeScore, [
+                'description' => '领卡积分同步'
+            ]);
+        }
+
+        $this->save([
+            'score' => $score,
+            'used_score' => $usedScore,
+            'total_score' => $score + $usedScore,
+        ]);
+    }
+
+    /**
+     * 加载卡券统计数据
+     */
+    protected function loadCardCount()
+    {
+        $user = $this->user;
+
         $totalCardCount = wei()->userWechatCard()->curApp()->count(['user_id' => $user['id']]);
         $cardCount = wei()->userWechatCard()->curApp()->count([
             'user_id' => $user['id'],
             'status' => UserWechatCardRecord::STATUS_NORMAL,
         ]);
 
-        $this->save([
+        $this->fromArray([
             'card_count' => $cardCount,
             'total_card_count' => $totalCardCount,
             'used_card_count' => $totalCardCount - $cardCount,
-            'score' => $score,
-            'used_score' => $usedScore,
-            'total_score' => $score + $usedScore,
         ]);
+    }
+
+    /**
+     * 执行积分改变后的流程
+     *
+     * 1. 按需更新等级
+     * 2. 将新的数据同步给微信
+     *
+     * @param int $score
+     * @param array $data
+     */
+    public function notifyScoreChange($score, array $data)
+    {
+        $apiData = [
+            'code' => $this['code'],
+            'card_id' => $this['card_wechat_id'],
+            'record_bonus' => $data['description'],
+            'bonus' => $this['score'],
+            'add_bonus' => $score,
+        ];
+
+        // 按需更新等级
+        $extraData = $this->updateMemberLevel();
+        if ($extraData) {
+            $apiData += $extraData;
+        }
+
+        $api = wei()->wechatAccount->getCurrentAccount()->createApiService();
+        $api->updateMemberCardUser($apiData);
+    }
+
+    /**
+     * 按需更新等级,并返回微信接口所需的资料
+     *
+     * @return array
+     */
+    protected function updateMemberLevel()
+    {
+        // 如果指定了等级,暂不用更新
+        if ($this['is_specified_level']) {
+            return [];
+        }
+
+        $level = wei()->memberLevel->getLevelByScore($this['score']);
+        if ($level['id'] == $this['level_id']) {
+            return [];
+        }
+
+        $this['level_id'] = $level['id'];
+        $this->save();
+
+        $data = [];
+        if ($level['image']) {
+            $ret = wei()->wechatMedia->updateUrlToWechatUrlRet($level['image']);
+            if ($ret['code'] === 1) {
+                $data['background_pic_url'] = $data['url'];
+            }
+        }
+
+        return $data;
     }
 }
