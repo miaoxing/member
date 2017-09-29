@@ -83,6 +83,7 @@ class MemberRecord extends BaseModel
     {
         $this->loadCardCount();
 
+        // 计算出各项积分值
         $user = $this->user;
         $score = wei()->score->getScore($user);
         $usedScore = wei()->scoreLog()
@@ -92,20 +93,21 @@ class MemberRecord extends BaseModel
                 'user_id' => $user['id'],
                 'action' => ScoreLogRecord::ACTION_SUB,
             ]);
-
-        // 对比出积分差异
         $changeScore = $score - $this['score'];
-        if ($changeScore) {
-            $this->notifyScoreChange($changeScore, [
-                'description' => '领卡积分同步',
-            ]);
-        }
 
+        // 保存最新的积分数据
         $this->save([
             'score' => $score,
             'used_score' => $usedScore,
             'total_score' => $score + $usedScore,
         ]);
+
+        // 再将积分差异同步给微信
+        if ($changeScore) {
+            $this->notifyScoreChange($changeScore, [
+                'description' => '领卡积分同步',
+            ]);
+        }
     }
 
     /**
