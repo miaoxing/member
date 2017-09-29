@@ -97,7 +97,7 @@ class MemberRecord extends BaseModel
         $changeScore = $score - $this['score'];
         if ($changeScore) {
             $this->notifyScoreChange($changeScore, [
-                'description' => '领卡积分同步'
+                'description' => '领卡积分同步',
             ]);
         }
 
