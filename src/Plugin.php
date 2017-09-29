@@ -224,6 +224,7 @@ class Plugin extends BasePlugin
         wei()->memberStatLog()->setAppId()->save([
             'card_id' => $member['card_id'],
             'action' => MemberStatLogRecord::ACTION_FIRST_CONSUME,
+            'created_date' => date('Y-m-d'),
         ]);
     }
 
@@ -362,6 +363,7 @@ class Plugin extends BasePlugin
         wei()->memberStatLog()->setAppId()->save([
             'card_id' => $data['card_id'],
             'action' => MemberStatLogRecord::ACTION_RECEIVE,
+            'created_date' => date('Y-m-d'),
         ]);
 
         // 3. 更新会员卡的积分,卡券数据

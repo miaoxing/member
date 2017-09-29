@@ -89,7 +89,7 @@ class MemberRecord extends BaseModel
             ->select('SUM(score)')
             ->fetchColumn([
                 'user_id' => $user['id'],
-                'type' => ScoreLogRecord::ACTION_SUB,
+                'action' => ScoreLogRecord::ACTION_SUB,
             ]);
 
         $totalCardCount = wei()->userWechatCard()->curApp()->count(['user_id' => $user['id']]);
