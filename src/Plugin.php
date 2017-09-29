@@ -8,7 +8,6 @@ use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Refund\Service\Refund;
-use Miaoxing\WechatCard\Service\UserCard;
 use Miaoxing\WechatCard\Service\UserWechatCardRecord;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
 use Wei\RetTrait;
@@ -372,6 +371,7 @@ class Plugin extends BasePlugin
         ]);
         if (!$member) {
             $this->logger->info('Member card not found', ['data' => $app->getAttrs()]);
+
             return;
         }
 
