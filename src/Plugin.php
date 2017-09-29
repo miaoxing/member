@@ -2,12 +2,14 @@
 
 namespace Miaoxing\Member;
 
+use Miaoxing\Member\Job\UserGetMemberCard;
 use Miaoxing\Member\Service\MemberRecord;
 use Miaoxing\Member\Service\MemberStatLogRecord;
 use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Refund\Service\Refund;
+use Miaoxing\Score\Service\ScoreLogRecord;
 use Miaoxing\WechatCard\Service\UserWechatCardRecord;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
 use Wei\RetTrait;
@@ -303,21 +305,6 @@ class Plugin extends BasePlugin
             'code' => $app->getAttr('UserCardCode'),
         ]);
 
-        // 如果是赠送,设置原来的卡号为无效
-        if ($app->getAttr('IsGiveByFriend')) {
-            $friendMember = wei()->member()->find(['card_code' => $app->getAttr('OldUserCardCode')]);
-            /** @var MemberRecord $friendMember */
-            if ($friendMember) {
-                $friendMember->save([
-                    'status' => UserWechatCardRecord::STATUS_UNAVAILABLE,
-                    'unavailable_at' => date('Y-m-d H:i:s', $app->getCreateTime()),
-                ]);
-                $friendMember->softDelete();
-            } else {
-                $this->logger->warning('找不到赠送用户的原始会员卡', $app->getAttrs());
-            }
-        }
-
         // 新卡则初始化等级和积分等
         if ($member->isNew()) {
             $member->fromArray([
@@ -347,10 +334,41 @@ class Plugin extends BasePlugin
             'outer_str' => (string) $app->getAttr('OuterStr'),
         ]);
 
+        wei()->queue->push(UserGetMemberCard::className(), [
+            'member_id' => $member['id'],
+            'card_id' => $card['id'],
+            'attrs' => $app->getAttrs()
+        ], wei()->app->getNamespace());
+    }
+
+    public function onAsyncUserGetMemberCard($data)
+    {
+        // 如果是赠送,设置原来的卡号为无效
+        $attrs = $data['attrs'];
+        if ($attrs['IsGiveByFriend']) {
+            $friendMember = wei()->member()->find(['card_code' => $attrs['OldUserCardCode']]);
+            /** @var MemberRecord $friendMember */
+            if ($friendMember) {
+                $friendMember->save([
+                    'status' => UserWechatCardRecord::STATUS_UNAVAILABLE,
+                    'unavailable_at' => date('Y-m-d H:i:s', $attrs['CreateTime']),
+                ]);
+                $friendMember->softDelete();
+            } else {
+                $this->logger->warning('找不到赠送用户的原始会员卡', $attrs);
+            }
+        }
+
+        // 2. 记录统计数据
         wei()->memberStatLog()->setAppId()->save([
-            'card_id' => $member['card_id'],
+            'card_id' => $data['card_id'],
             'action' => MemberStatLogRecord::ACTION_RECEIVE,
         ]);
+
+        // 3. 更新会员卡的积分,卡券数据
+        /** @var MemberRecord $member */
+        $member = wei()->member()->findById($data['member_id']);
+        $member->syncCountData();
     }
 
     /**

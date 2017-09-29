@@ -4,6 +4,9 @@ namespace Miaoxing\Member\Service;
 
 use miaoxing\plugin\BaseModel;
 use Miaoxing\Plugin\Service\User;
+use Miaoxing\Score\Service\ScoreLog;
+use Miaoxing\Score\Service\ScoreLogRecord;
+use Miaoxing\WechatCard\Service\UserWechatCardRecord;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
 
 /**
@@ -71,5 +74,37 @@ class MemberRecord extends BaseModel
     {
         parent::afterSave();
         $this['field_list'] = (array) json_decode($this['field_list'], true);
+    }
+
+    /**
+     * 更新会员卡的积分,卡券数据
+     */
+    public function syncCountData()
+    {
+        $user = $this->user;
+
+        $score = wei()->score->getScore($user);
+        $usedScore = wei()->scoreLog()
+            ->curApp()
+            ->select('SUM(score)')
+            ->fetchColumn([
+                'user_id' => $user['id'],
+                'type' => ScoreLogRecord::ACTION_SUB,
+            ]);
+
+        $totalCardCount = wei()->userWechatCard()->curApp()->count(['user_id' => $user['id']]);
+        $cardCount = wei()->userWechatCard()->curApp()->count([
+            'user_id' => $user['id'],
+            'status' => UserWechatCardRecord::STATUS_NORMAL,
+        ]);
+
+        $this->save([
+            'card_count' => $cardCount,
+            'total_card_count' => $totalCardCount,
+            'used_card_count' => $totalCardCount - $cardCount,
+            'score' => $score,
+            'used_score' => $usedScore,
+            'total_score' => $score + $usedScore,
+        ]);
     }
 }
