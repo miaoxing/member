@@ -8,6 +8,7 @@ use Miaoxing\Order\Service\Order;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Refund\Service\Refund;
+use Miaoxing\WechatCard\Service\UserCard;
 use Miaoxing\WechatCard\Service\UserWechatCardRecord;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
 use Wei\RetTrait;
@@ -300,13 +301,8 @@ class Plugin extends BasePlugin
         $member = wei()->member()->curApp()->findOrInit([
             'card_id' => $card['id'],
             'user_id' => $user['id'],
+            'code' => $app->getAttr('UserCardCode'),
         ]);
-
-//        if (!$member->isNew()) {
-//            $this->logger->info('用户已有会员卡', $app->getAttrs());
-
-//            return;
-//        }
 
         // 如果是赠送,设置原来的卡号为无效
         if ($app->getAttr('IsGiveByFriend')) {
@@ -332,6 +328,15 @@ class Plugin extends BasePlugin
             ]);
         }
 
+        // 还原卡则重置状态为正常
+        if ($app->getAttr('IsRestoreMemberCard')) {
+            $member->fromArray([
+                'status' => UserWechatCardRecord::STATUS_NORMAL,
+                'deleted_at' => '0000-00-00 00:00:00',
+                'deleted_by' => 0,
+            ]);
+        }
+
         /** @var MemberRecord $member */
         $member->save([
             'card_id' => $card['id'],
@@ -341,7 +346,6 @@ class Plugin extends BasePlugin
             'is_give_by_friend' => $app->getAttr('IsGiveByFriend'),
             'friend_user_name' => (string) $app->getAttr('FriendUserName'),
             'outer_str' => (string) $app->getAttr('OuterStr'),
-            'status' => UserWechatCardRecord::STATUS_NORMAL, // 领卡则还原状态为正常
         ]);
 
         wei()->memberStatLog()->setAppId()->save([
@@ -368,7 +372,6 @@ class Plugin extends BasePlugin
         ]);
         if (!$member) {
             $this->logger->info('Member card not found', ['data' => $app->getAttrs()]);
-
             return;
         }
 

@@ -27,7 +27,10 @@ class Member extends BaseService
         $user || $user = wei()->curUser;
 
         if (!isset($this->members[$user['id']])) {
-            $this->members[$user['id']] = wei()->member()->curApp()->notDeleted()->findOrInit(['user_id' => $user['id']]);
+            $this->members[$user['id']] = wei()->member()
+                ->curApp()
+                ->notDeleted()
+                ->findOrInit(['user_id' => $user['id']]);
         }
 
         return $this->members[$user['id']];
