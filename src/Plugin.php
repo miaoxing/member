@@ -28,6 +28,8 @@ class Plugin extends BasePlugin
      */
     protected $description = '基于微信会员卡的会员系统';
 
+    protected $adminNavId = 'member';
+
     public function onAdminNavGetNavs(&$navs, &$categories, &$subCategories)
     {
         $categories['member'] = [
