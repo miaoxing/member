@@ -20,7 +20,6 @@ class Member extends BaseService
     /**
      * @param User $user
      * @return MemberRecord
-     * @todo 优先获取默认的会员卡?
      */
     public function getMember($user = null)
     {
@@ -30,6 +29,7 @@ class Member extends BaseService
             $this->members[$user['id']] = wei()->member()
                 ->curApp()
                 ->notDeleted()
+                ->andWhere(['card_id' => wei()->setting('member.default_card_id')])
                 ->findOrInit(['user_id' => $user['id']]);
         }
 
