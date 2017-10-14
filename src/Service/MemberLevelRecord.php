@@ -14,9 +14,9 @@ class MemberLevelRecord extends BaseModel
 
     protected $appIdColumn = 'app_id';
 
-    protected $createAtColumn = 'created_at';
+    protected $createdAtColumn = 'created_at';
 
-    protected $updateAtColumn = 'updated_at';
+    protected $updatedAtColumn = 'updated_at';
 
     protected $createdByColumn = 'created_by';
 

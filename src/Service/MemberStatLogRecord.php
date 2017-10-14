@@ -23,7 +23,7 @@ class MemberStatLogRecord extends BaseModel
 
     protected $appIdColumn = 'app_id';
 
-    protected $createAtColumn = 'created_at';
+    protected $createdAtColumn = 'created_at';
 
     protected $createdByColumn = 'created_by';
 
