@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Member;
 
+use Miaoxing\Address\Service\Address;
 use Miaoxing\Member\Job\UserGetMemberCard;
 use Miaoxing\Member\Service\MemberRecord;
 use Miaoxing\Member\Service\MemberStatLogRecord;
@@ -134,6 +135,47 @@ class Plugin extends BasePlugin
         wei()->score->changeScore(-$score, [
             'description' => sprintf('退款%s元，扣除%s积分', $refund['fee'], $score),
         ], $user);
+    }
+
+    public function onPreOrderCreate(Order $order, Address $address = null, $data)
+    {
+        if (!$data['use_score']) {
+            return;
+        }
+
+        $user = $order->getUser();
+        $member = wei()->member->getMember($user);
+        if ($member->isNew()) {
+            return $this->err('您还没有会员卡,不能抵扣积分');
+        }
+
+        $ret = $member->wechatCard->calUseScore($user, $data['use_score'], $order->getCarts()->getProductAmount());
+        if ($ret['code'] !== 1) {
+            return $ret;
+        }
+
+        $order->setAmountRule('member_use_score', [
+            'name' => '积分抵扣',
+            'amountOff' => $ret['reduceMoney'],
+            'useScore' => $data['use_score'],
+        ]);
+        $order->setConfig('member_use_score', [
+            'use_score' => $data['use_score'],
+            'reduce_money' => $ret['reduceMoney'],
+        ]);
+    }
+
+    public function onPostOrderCreate(Order $order, $data)
+    {
+        $rule = $order->getAmountRule('member_use_score');
+        if ($rule) {
+            wei()->score->changeScore($rule['useScore'], [], $order->getUser());
+        }
+    }
+
+    public function onAdminOrdersShowItem()
+    {
+        $this->display();
     }
 
     /**
