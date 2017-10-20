@@ -413,6 +413,18 @@ class Plugin extends BasePlugin
         $member->softDelete();
     }
 
+    public function onPostOrderCancel(Order $order)
+    {
+        if (!isset($order['config']['member_use_score'])) {
+            return;
+        }
+
+        $useScore = $order['config']['member_use_score'];
+        $this->changeScoreByOrder($useScore, $order, [
+            'description' => sprintf('取消订单,返还抵扣的%s积分', $useScore['use_score'])
+        ]);
+    }
+
     protected function changeScoreByOrder($score, Order $order, $data)
     {
         $user = $order->getUser();
