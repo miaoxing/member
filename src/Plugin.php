@@ -120,7 +120,8 @@ class Plugin extends BasePlugin
      */
     public function onAsyncRefundRefund(Refund $refund)
     {
-        $user = $refund->getUser();
+        $order = $refund->getOrder();
+        $user = $order->getUser();
         $member = wei()->member->getMember($user);
         if ($member->isNew()) {
             return;
@@ -132,9 +133,9 @@ class Plugin extends BasePlugin
             return;
         }
 
-        wei()->score->changeScore(-$score, [
+        $this->changeScoreByOrder(-$score, $order, [
             'description' => sprintf('退款%s元，扣除%s积分', $refund['fee'], $score),
-        ], $user);
+        ]);
     }
 
     public function onPreOrderCreate(Order $order, Address $address = null, $data)
@@ -169,9 +170,9 @@ class Plugin extends BasePlugin
     {
         $rule = $order->getAmountRule('member_use_score');
         if ($rule) {
-            wei()->score->changeScore(-$rule['useScore'], [
+            $this->changeScoreByOrder(-$rule['useScore'], $order, [
                 'description' => sprintf('使用%s积分，抵扣%s元', $rule['useScore'], $rule['amountOff'])
-            ], $order->getUser());
+            ]);
         }
     }
 
@@ -201,9 +202,9 @@ class Plugin extends BasePlugin
             return;
         }
 
-        wei()->score->changeScore($score, [
+        $this->changeScoreByOrder($score, $order, [
             'description' => sprintf('消费%s元，获得%s积分', $order['amount'], $score),
-        ], $user);
+        ]);
     }
 
     /**
@@ -410,5 +411,18 @@ class Plugin extends BasePlugin
         /** @var MemberRecord $member */
         $member['status'] = UserWechatCardRecord::STATUS_DELETE;
         $member->softDelete();
+    }
+
+    protected function changeScoreByOrder($score, Order $order, $data)
+    {
+        $user = $order->getUser();
+        $member = wei()->member->getMember($order->getUser());
+
+        $data += [
+            'shop_id' => $order['shopId'],
+            'member_code' => $member['code'],
+        ];
+
+        return wei()->score->changeScore($score, $data, $user);
     }
 }
