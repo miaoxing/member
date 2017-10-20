@@ -169,7 +169,9 @@ class Plugin extends BasePlugin
     {
         $rule = $order->getAmountRule('member_use_score');
         if ($rule) {
-            wei()->score->changeScore($rule['useScore'], [], $order->getUser());
+            wei()->score->changeScore(-$rule['useScore'], [
+                'description' => sprintf('使用%s积分，抵扣%s元', $rule['useScore'], $rule['amountOff'])
+            ], $order->getUser());
         }
     }
 
