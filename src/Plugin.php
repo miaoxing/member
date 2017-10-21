@@ -431,6 +431,7 @@ class Plugin extends BasePlugin
         $member = wei()->member->getMember($order->getUser());
 
         $data += [
+            'order_id' => $order['id'],
             'shop_id' => $order['shopId'],
             'member_code' => $member['code'],
         ];
