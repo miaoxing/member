@@ -92,13 +92,7 @@ class Plugin extends BasePlugin
             return $this->err('用户没有会员卡');
         }
 
-        $member->incr('score', $score);
-        if ($score > 0) {
-            $member->incr('total_score', $score);
-        } else {
-            $member->incr('used_score', -$score);
-        }
-        $member->save();
+        $member->changeScore($score);
     }
 
     public function onAsyncPostScoreChange($data)

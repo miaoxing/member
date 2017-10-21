@@ -189,4 +189,19 @@ class MemberRecord extends BaseModel
 
         return $data;
     }
+
+    public function changeScore($score)
+    {
+        $realScore = $this['score'] + $score;
+
+        $this->incr('score', $score);
+        if ($score > 0) {
+            $this->incr('total_score', $score);
+        } else {
+            $this->incr('used_score', -$score);
+        }
+        $this->save();
+
+        $this['score'] = $realScore;
+    }
 }
