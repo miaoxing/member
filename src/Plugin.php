@@ -342,7 +342,7 @@ class Plugin extends BasePlugin
         // 如果是赠送,设置原来的卡号为无效
         $attrs = $data['attrs'];
         if ($attrs['IsGiveByFriend']) {
-            $friendMember = wei()->member()->find(['card_code' => $attrs['OldUserCardCode']]);
+            $friendMember = wei()->member()->find(['code' => $attrs['OldUserCardCode']]);
             /** @var MemberRecord $friendMember */
             if ($friendMember) {
                 $friendMember->save([
@@ -427,7 +427,7 @@ class Plugin extends BasePlugin
         $data += [
             'order_id' => $order['id'],
             'shop_id' => $order['shopId'],
-            'member_code' => $member['code'],
+            'card_code' => $member['code'],
         ];
 
         return wei()->score->changeScore($score, $data, $user);
