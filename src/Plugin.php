@@ -165,7 +165,7 @@ class Plugin extends BasePlugin
         $rule = $order->getAmountRule('member_use_score');
         if ($rule) {
             $this->changeScoreByOrder(-$rule['useScore'], $order, [
-                'description' => sprintf('使用%s积分，抵扣%s元', $rule['useScore'], $rule['amountOff'])
+                'description' => sprintf('使用%s积分，抵扣%s元', $rule['useScore'], $rule['amountOff']),
             ]);
         }
     }
@@ -415,7 +415,7 @@ class Plugin extends BasePlugin
 
         $useScore = $order['config']['member_use_score'];
         $this->changeScoreByOrder($useScore, $order, [
-            'description' => sprintf('取消订单,返还抵扣的%s积分', $useScore['use_score'])
+            'description' => sprintf('取消订单,返还抵扣的%s积分', $useScore['use_score']),
         ]);
     }
 
