@@ -215,11 +215,10 @@ class Plugin extends BasePlugin
 
         $member->save(['consumed_at' => $order['payTime']]);
 
-        wei()->memberStatLog()->setAppId()->save([
+        wei()->memberStatLog->create([
             'card_id' => $member['card_id'],
             'user_id' => $member['user_id'],
             'action' => MemberStatLogRecord::ACTION_FIRST_CONSUME,
-            'created_date' => date('Y-m-d'),
         ]);
     }
 
@@ -357,11 +356,10 @@ class Plugin extends BasePlugin
 
         // 2. 记录统计数据(还原卡则不记录为领取)
         if (!$attrs['IsRestoreMemberCard']) {
-            wei()->memberStatLog()->setAppId()->save([
+            wei()->memberStatLog->create([
                 'card_id' => $data['card_id'],
                 'user_id' => $data['user_id'],
                 'action' => MemberStatLogRecord::ACTION_RECEIVE,
-                'created_date' => date('Y-m-d'),
             ]);
         }
 
