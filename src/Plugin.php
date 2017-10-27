@@ -355,13 +355,15 @@ class Plugin extends BasePlugin
             }
         }
 
-        // 2. 记录统计数据
-        wei()->memberStatLog()->setAppId()->save([
-            'card_id' => $data['card_id'],
-            'user_id' => $data['user_id'],
-            'action' => MemberStatLogRecord::ACTION_RECEIVE,
-            'created_date' => date('Y-m-d'),
-        ]);
+        // 2. 记录统计数据(还原卡则不记录为领取)
+        if (!$attrs['IsRestoreMemberCard']) {
+            wei()->memberStatLog()->setAppId()->save([
+                'card_id' => $data['card_id'],
+                'user_id' => $data['user_id'],
+                'action' => MemberStatLogRecord::ACTION_RECEIVE,
+                'created_date' => date('Y-m-d'),
+            ]);
+        }
 
         // 3. 如果是新卡,发放赠送的积分
         /** @var MemberRecord $member */
