@@ -165,6 +165,7 @@ $view->layout();
     'plugins/app/libs/jquery.populate/jquery.populate'
   ], function () {
     var $table = $('.js-member-table').dataTable({
+      sorting: [[0, 'desc']],
       ajax: {
         url: $.queryUrl('admin/members.json')
       },
