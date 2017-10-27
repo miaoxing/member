@@ -279,8 +279,8 @@ $view->layout();
       format: 'YYYY-MM-DD',
       separator: ' ~ '
     }, function (start, end) {
-      $('.js-start-date').val(start.format(this.format));
-      $('.js-end-date').val(end.format(this.format));
+      $('.js-start-date').val(start.format(this.format) + ' 00:00:00');
+      $('.js-end-date').val(end.format(this.format) + ' 23:59:59');
       this.element.trigger('change');
     });
 
