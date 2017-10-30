@@ -407,6 +407,18 @@ class Plugin extends BasePlugin
         $member->softDelete();
     }
 
+    public function onUserWechatCardExpire(UserWechatCardRecord $card)
+    {
+        $member = wei()->member->getMember($card->user);
+        if ($member->isNew()) {
+            return;
+        }
+
+        $member->incr('used_card_count', 1)
+            ->decr('card_count', 1)
+            ->save();
+    }
+
     public function onPostOrderCancel(Order $order)
     {
         if (!isset($order['config']['member_use_score'])) {
