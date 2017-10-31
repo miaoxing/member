@@ -4,6 +4,9 @@ namespace Miaoxing\Member\Service;
 
 use miaoxing\plugin\BaseService;
 
+/**
+ * 会员统计日志
+ */
 class MemberStatLog extends BaseService
 {
     public function __invoke()

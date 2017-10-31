@@ -38,6 +38,21 @@ class MemberRecord extends BaseModel
 
     protected $userIdColumn = 'user_id';
 
+    protected $labels = [
+        'level_id' => '等级',
+        'consumed_at' => '首次消费时间',
+        'total_card_count' => '领取的优惠券数',
+        'used_card_count' => '使用的优惠券数',
+        'score' => '现有积分数',
+        'used_score' => '使用过的积分数',
+        'total_score' => '总的积分数',
+    ];
+
+    public function getLabels()
+    {
+        return $this->labels;
+    }
+
     public function user()
     {
         return $this->belongsTo('user');

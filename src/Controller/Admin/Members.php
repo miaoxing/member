@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Member\Controller\Admin;
 
+use Miaoxing\Member\Service\MemberRecord;
 use miaoxing\plugin\BaseController;
 
 class Members extends BaseController
@@ -20,6 +21,7 @@ class Members extends BaseController
     {
         switch ($req['_format']) {
             case 'json':
+            case 'csv':
                 $members = wei()->member()
                     ->curApp()
                     ->notDeleted();
@@ -56,25 +58,71 @@ class Members extends BaseController
                 // 数据
                 $members->findAll()->load(['user', 'memberLevel']);
                 $data = [];
+
+                /** @var MemberRecord $member */
                 foreach ($members as $member) {
                     $data[] = $member->toArray() + [
                             'user' => $member->user,
+                            'user_nick_name' => $member->user->getNickName(),
                             'level_name' => $member->memberLevel['name'],
                         ];
                 }
 
-                return $this->suc([
-                    'data' => $data,
-                    'page' => (int) $req['page'],
-                    'rows' => (int) $req['rows'],
-                    'records' => $members->count(),
-                ]);
+                if ($req['_format'] == 'csv') {
+                    return $this->renderCsv($data);
+                } else {
+                    return $this->suc([
+                        'data' => $data,
+                        'page' => (int) $req['page'],
+                        'rows' => (int) $req['rows'],
+                        'records' => $members->count(),
+                    ]);
+                }
 
             default:
                 $levels = wei()->memberLevel()->curApp()->findAll();
 
                 return get_defined_vars();
         }
+    }
+
+    protected function renderCsv($members)
+    {
+        $labels = wei()->memberRecord->getLabels();
+        $data = [];
+        $data[0] = [
+            '用户',
+            '手机号',
+            $labels['level_id'],
+            $labels['consumed_at'],
+            $labels['total_card_count'],
+            $labels['used_card_count'],
+            $labels['score'],
+            $labels['used_score'],
+            $labels['total_score'],
+        ];
+
+        foreach ($members as $member) {
+            $rowData = [
+                $member['user_nick_name'],
+                $member['user']['mobile'],
+                $member['level_name'],
+                $member['consumed_at'],
+                $member['total_card_count'],
+                $member['used_card_count'],
+                $member['score'],
+                $member['used_score'],
+                $member['total_score'],
+            ];
+
+            $newRowData = [];
+            foreach ($rowData as $row) {
+                $newRowData[] = str_replace(',', ' ', $row . '');
+            }
+            $data[] = $newRowData;
+        }
+
+        return wei()->csvExporter->export('members', $data);
     }
 
     public function updateLevelAction($req)

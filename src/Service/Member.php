@@ -6,12 +6,18 @@ use miaoxing\plugin\BaseService;
 use Miaoxing\Plugin\Service\User;
 use Wei\RetTrait;
 
+/**
+ * 会员
+ */
 class Member extends BaseService
 {
     use RetTrait;
 
     protected $members = [];
 
+    /**
+     * @return \Miaoxing\Member\Service\MemberRecord|\Miaoxing\Member\Service\MemberRecord[]
+     */
     public function __invoke()
     {
         return wei()->memberRecord();

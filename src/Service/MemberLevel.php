@@ -4,6 +4,9 @@ namespace Miaoxing\Member\Service;
 
 use miaoxing\plugin\BaseService;
 
+/**
+ * 会员等级
+ */
 class MemberLevel extends BaseService
 {
     public function __invoke()

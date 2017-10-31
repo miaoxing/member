@@ -52,8 +52,12 @@ $view->layout();
 
           <div class="clearfix form-group form-group-sm">
             <div class="col-md-offset-1 col-md-6">
-              <button class="js-user-filter btn btn-primary btn-sm" type="submit">
+              <button class="btn btn-primary btn-sm" type="submit">
                 查询
+              </button>
+              &nbsp;
+              <button class="js-export-csv btn btn-default btn-sm" type="button">
+                导出
               </button>
             </div>
           </div>
@@ -167,7 +171,7 @@ $view->layout();
     var $table = $('.js-member-table').dataTable({
       sorting: [[0, 'desc']],
       ajax: {
-        url: $.queryUrl('admin/members.json')
+        url: $.queryUrl('admin/members', {_format: 'json'})
       },
       columns: [
         {
@@ -324,6 +328,10 @@ $view->layout();
             }
           });
       });
+    });
+
+    $('.js-export-csv').click(function () {
+      window.location = $.appendUrl($table.fnSettings().ajax.url, {page: 1, rows: 99999, _format: 'csv'});
     });
   });
 </script>
