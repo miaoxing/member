@@ -10,10 +10,10 @@ $view->layout();
       <form class="js-member-form form-horizontal filter-form" role="form">
         <div class="well form-well m-b">
           <div class="form-group form-group-sm">
-            <label class="col-md-1 control-label" for="nick-name">操作人：</label>
+            <label class="col-md-1 control-label" for="created-by">操作人：</label>
 
             <div class="col-md-3">
-              <input type="text" class="js-nick-name form-control input-sm" id="nick-name" name="user_id" placeholder="请输入昵称搜索">
+              <input type="text" class="js-nick-name form-control input-sm" id="created-by" name="created_by" placeholder="请输入昵称搜索">
             </div>
 
             <label class="col-md-1 control-label" for="created-at">操作时间：</label>
@@ -74,7 +74,7 @@ $view->layout();
     'comps/select2/select2.min',
     'css!comps/select2/select2',
     'css!comps/select2-bootstrap-css/select2-bootstrap',
-    'daterangepicker',
+    'daterangepicker'
   ], function () {
     var $table = $('.js-member-table').dataTable({
       ajax: {
@@ -84,7 +84,7 @@ $view->layout();
         {
           data: 'creator',
           render: function (data, type, full) {
-            return template.render('user-info-tpl', full);
+            return template.render('user-info-tpl', data);
           }
         },
         {
@@ -93,7 +93,7 @@ $view->layout();
         {
           data: 'user',
           render: function (data, type, full) {
-            return template.render('user-info-tpl', full);
+            return template.render('user-info-tpl', data);
           }
         },
         {

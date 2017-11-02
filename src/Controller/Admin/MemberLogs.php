@@ -26,8 +26,8 @@ class MemberLogs extends BaseController
                     ->page($req['page'])
                     ->desc('id');
 
-                if ($req['user_id']) {
-                    $memberLogs->andWhere(['user_id' => $req['user_id']]);
+                if ($req['created_by']) {
+                    $memberLogs->andWhere(['created_by' => $req['created_by']]);
                 }
 
                 // TODO 解决code和微信冲突
