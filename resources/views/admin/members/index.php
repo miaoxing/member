@@ -39,6 +39,11 @@ $view->layout();
           </div>
 
           <div class="form-group form-group-sm">
+            <label class="col-md-1 control-label" for="code">卡号：</label>
+
+            <div class="col-md-3">
+              <input type="text" class="form-control" id="code" name="card_code">
+            </div>
 
             <label class="col-md-1 control-label" for="consumed-at">首次消费时间：</label>
 
@@ -68,6 +73,7 @@ $view->layout();
         <thead>
         <tr>
           <th>用户</th>
+          <th>卡号</th>
           <th>等级</th>
           <th>首次消费时间</th>
           <th>领取的优惠券数</th>
@@ -75,7 +81,7 @@ $view->layout();
           <th>现有积分数</th>
           <th>使用过的积分数</th>
           <th>总的积分数</th>
-          <th class="t-8">操作</th>
+          <th class="t-5">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -179,6 +185,9 @@ $view->layout();
           render: function (data, type, full) {
             return template.render('user-info-tpl', full.user);
           }
+        },
+        {
+          data: 'code'
         },
         {
           data: 'level_name',

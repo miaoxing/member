@@ -45,6 +45,10 @@ class Members extends BaseController
                     $members->andWhere(['level_id' => $req['level_id']]);
                 }
 
+                if ($req['card_code']) {
+                    $members->andWhere('code LIKE ?', '%' . $req['card_code'] . '%');
+                }
+
                 if ($req['start_date']) {
                     $members->andWhere('consumed_at >= ?', $req['start_date']);
                 }
