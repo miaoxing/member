@@ -245,7 +245,8 @@ class Plugin extends BasePlugin
 
     public function onPostWechatUserConsumeCard(UserWechatCardRecord $userCard)
     {
-        $member = wei()->member->getMember();
+        // NOTE 使用卡券对应的用户,因为有可能是朋友核销共享的券
+        $member = wei()->member->getMember($userCard->user);
         if ($member->isNew()) {
             return;
         }
