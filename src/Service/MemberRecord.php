@@ -39,6 +39,7 @@ class MemberRecord extends BaseModel
     protected $userIdColumn = 'user_id';
 
     protected $labels = [
+        'code' => '卡号',
         'level_id' => '等级',
         'consumed_at' => '首次消费时间',
         'total_card_count' => '领取的优惠券数',

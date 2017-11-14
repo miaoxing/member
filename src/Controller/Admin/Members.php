@@ -100,6 +100,7 @@ class Members extends BaseController
         $data[0] = [
             '用户',
             '手机号',
+            $labels['code'],
             $labels['level_id'],
             $labels['consumed_at'],
             $labels['total_card_count'],
@@ -111,8 +112,9 @@ class Members extends BaseController
 
         foreach ($members as $member) {
             $rowData = [
-                $member['user_nick_name'],
+                $member['user_nick_name'] . ' ',
                 $member['user']['mobile'],
+                $member['code'],
                 $member['level_name'],
                 $member['consumed_at'],
                 $member['total_card_count'],
