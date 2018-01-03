@@ -328,7 +328,7 @@ class Plugin extends BasePlugin
             'outer_str' => (string) $app->getAttr('OuterStr'),
         ]);
 
-        wei()->queue->push(UserGetMemberCard::className(), [
+        wei()->queue->push(UserGetMemberCard::class, [
             'member_id' => $member['id'],
             'card_id' => $card['id'],
             'user_id' => $user['id'],
