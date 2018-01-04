@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Member\Service;
 
-use miaoxing\plugin\BaseService;
+use Miaoxing\Plugin\BaseService;
 
 /**
  * 会员日志
