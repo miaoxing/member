@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Member\Service;
 
-use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Score\Service\ScoreLog;
 use Miaoxing\Score\Service\ScoreLogRecord;
