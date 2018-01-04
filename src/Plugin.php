@@ -7,7 +7,7 @@ use Miaoxing\Member\Job\UserGetMemberCard;
 use Miaoxing\Member\Service\MemberRecord;
 use Miaoxing\Member\Service\MemberStatLogRecord;
 use Miaoxing\Order\Service\Order;
-use miaoxing\plugin\BasePlugin;
+use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Refund\Service\Refund;
 use Miaoxing\WechatCard\Service\UserWechatCardRecord;
