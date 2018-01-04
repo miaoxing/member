@@ -3,7 +3,7 @@
 namespace Miaoxing\Member\Controller\Admin;
 
 use Miaoxing\Member\Service\MemberRecord;
-use miaoxing\plugin\BaseController;
+use Miaoxing\Plugin\BaseController;
 
 class Members extends BaseController
 {

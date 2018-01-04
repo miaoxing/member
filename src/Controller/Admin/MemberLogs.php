@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Member\Controller\Admin;
 
-use miaoxing\plugin\BaseController;
+use Miaoxing\Plugin\BaseController;
 
 class MemberLogs extends BaseController
 {

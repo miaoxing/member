@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Member\Controller\Cli;
 
-use miaoxing\plugin\BaseController;
+use Miaoxing\Plugin\BaseController;
 
 class Members extends BaseController
 {
