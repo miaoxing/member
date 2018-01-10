@@ -251,9 +251,14 @@ class Plugin extends BasePlugin
             return;
         }
 
-        $member->decr('card_count', 1)
-            ->incr('used_card_count', 1)
-            ->save();
+        // TODO
+        try {
+            $member->decr('card_count', 1)
+                ->incr('used_card_count', 1)
+                ->save();
+        } catch (\PDOException $e) {
+            $this->logger->info($e);
+        }
     }
 
     public function onWechatUserGiftingCard(WeChatApp $app, User $user)
