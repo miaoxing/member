@@ -141,8 +141,7 @@ class Members extends BaseController
 
         $ret = wei()->v()
             ->key('level_id', '等级')
-            ->notEqualTo($member['level_id'])
-            ->message('notEqualTo', '%name%未改变')
+            ->notEqualTo($member['level_id'])->message( '%name%未改变')
             ->key('description', '更改说明')
             ->check($req);
         if ($ret['code'] !== 1) {
