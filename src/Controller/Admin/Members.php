@@ -139,26 +139,14 @@ class Members extends BaseController
         $member = wei()->member()->curApp()->findOneById($req['id']);
         $level = $member->memberLevel;
 
-        $validator = wei()->validate([
-            'data' => $req,
-            'rules' => [
-                'level_id' => [
-                    'notEqualTo' => $member['level_id'],
-                ],
-                'description' => [],
-            ],
-            'names' => [
-                'level_id' => '等级',
-                'description' => '更改说明',
-            ],
-            'messages' => [
-                'level_id' => [
-                    'notEqualTo' => '%name%未改变',
-                ],
-            ],
-        ]);
-        if (!$validator->isValid()) {
-            return $this->err($validator->getFirstMessage());
+        $ret = wei()->v()
+            ->key('level_id', '等级')
+            ->notEqualTo($member['level_id'])
+            ->message('notEqualTo', '%name%未改变')
+            ->key('description', '更改说明')
+            ->check($req);
+        if ($ret['code'] !== 1) {
+            return $ret;
         }
 
         // 判断是否指定了和积分范围不一致的等级
