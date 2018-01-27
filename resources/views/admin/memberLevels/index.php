@@ -36,7 +36,7 @@ $view->layout();
   <a href="<%= $.url('admin/member-levels/%s/edit', id) %>">编辑</a>
 </script>
 
-<?= $block('js') ?>
+<?= $block->js() ?>
 <script>
   require(['dataTable', 'form'], function () {
     $('.js-member-level-table').dataTable({
