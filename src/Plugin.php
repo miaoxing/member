@@ -134,7 +134,7 @@ class Plugin extends BasePlugin
 
     public function onPreOrderCreate(Order $order, Address $address = null, $data)
     {
-        if (!$data['use_score']) {
+        if (!$data['useScore']) {
             return;
         }
 
@@ -144,25 +144,25 @@ class Plugin extends BasePlugin
             return $this->err('您还没有会员卡,不能抵扣积分');
         }
 
-        $ret = $member->wechatCard->calUseScore($user, $data['use_score'], $order->getCarts()->getProductAmount());
+        $ret = $member->wechatCard->calUseScore($user, $data['useScore'], $order->getCarts()->getProductAmount());
         if ($ret['code'] !== 1) {
             return $ret;
         }
 
-        $order->setAmountRule('member_use_score', [
+        $order->setAmountRule('memberUseScore', [
             'name' => '积分抵扣',
             'amountOff' => $ret['reduceMoney'],
-            'useScore' => $data['use_score'],
+            'useScore' => $data['useScore'],
         ]);
-        $order->setConfig('member_use_score', [
-            'use_score' => $data['use_score'],
-            'reduce_money' => $ret['reduceMoney'],
+        $order->setConfig('memberUseScore', [
+            'useScore' => $data['useScore'],
+            'reduceMoney' => $ret['reduceMoney'],
         ]);
     }
 
     public function onPostOrderCreate(Order $order, $data)
     {
-        $rule = $order->getAmountRule('member_use_score');
+        $rule = $order->getAmountRule('memberUseScore');
         if ($rule) {
             $this->changeScoreByOrder(-$rule['useScore'], $order, [
                 'description' => sprintf('使用%s积分，抵扣%s元', $rule['useScore'], $rule['amountOff']),
@@ -427,13 +427,13 @@ class Plugin extends BasePlugin
 
     public function onPostOrderCancel(Order $order)
     {
-        if (!isset($order['config']['member_use_score'])) {
+        if (!isset($order['config']['memberUseScore'])) {
             return;
         }
 
-        $useScore = $order['config']['member_use_score'];
+        $useScore = $order['config']['memberUseScore'];
         $this->changeScoreByOrder($useScore, $order, [
-            'description' => sprintf('取消订单,返还抵扣的%s积分', $useScore['use_score']),
+            'description' => sprintf('取消订单,返还抵扣的%s积分', $useScore['useScore']),
         ]);
     }
 
