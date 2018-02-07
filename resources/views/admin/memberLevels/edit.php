@@ -68,9 +68,8 @@ $view->layout();
           背景图
         </label>
 
-        <div class="js-upload-container col-lg-4">
-          <input type="file" class="js-image"/>
-          <input type="hidden" id="image" name="image" class="js-logo-url js-image-url"/>
+        <div class="col-lg-4">
+          <input type="text" id="image" name="image" class="js-image">
         </div>
 
         <label class="col-lg-4" for="image">
@@ -104,7 +103,7 @@ $view->layout();
     'validator',
     'plugins/app/libs/jquery.populate/jquery.populate',
     'plugins/app/libs/jquery-toggle-display/jquery-toggle-display',
-    'plugins/admin/js/image-input'
+    'plugins/admin/js/image-upload'
   ], function () {
     $('.js-member-level-form')
       .populate(<?= $memberLevel->toJson() ?>)
@@ -124,7 +123,7 @@ $view->layout();
       })
       .validate();
 
-    $('.js-image').imageUploadInput();
+    $('.js-image').imageUpload();
     $('.js-special').toggleDisplay();
   });
 </script>
