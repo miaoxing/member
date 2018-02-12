@@ -2,9 +2,9 @@
 
 namespace Miaoxing\Member\Service;
 
+use Miaoxing\Member\Job\MemberUpdateLevel;
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Service\User;
-use Miaoxing\Score\Service\ScoreLog;
 use Miaoxing\Score\Service\ScoreLogRecord;
 use Miaoxing\WechatCard\Service\UserWechatCardRecord;
 use Miaoxing\WechatCard\Service\WechatCardRecord;
@@ -202,6 +202,8 @@ class MemberRecord extends BaseModel
                 $data['background_pic_url'] = $data['url'];
             }
         }
+
+        wei()->queue->push(MemberUpdateLevel::class, ['id' => $this['id']], wei()->app->getNamespace());
 
         return $data;
     }

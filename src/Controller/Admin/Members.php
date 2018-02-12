@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Member\Controller\Admin;
 
+use Miaoxing\Member\Job\MemberUpdateLevel;
 use Miaoxing\Member\Service\MemberRecord;
 use Miaoxing\Plugin\BaseController;
 
@@ -86,6 +87,7 @@ class Members extends BaseController
                     ]);
                 }
 
+                // no break
             default:
                 $levels = wei()->memberLevel()->curApp()->findAll();
 
@@ -141,7 +143,7 @@ class Members extends BaseController
 
         $ret = wei()->v()
             ->key('level_id', '等级')
-            ->notEqualTo($member['level_id'])->message( '%name%未改变')
+            ->notEqualTo($member['level_id'])->message('%name%未改变')
             ->key('description', '更改说明')
             ->check($req);
         if ($ret['code'] !== 1) {
@@ -166,6 +168,8 @@ class Members extends BaseController
             'action' => sprintf('将等级从"%s"更改为"%s"', $level['name'], $newLevel['name']),
             'description' => $req['description'],
         ]);
+
+        wei()->queue->push(MemberUpdateLevel::class, ['id' => $member['id']], wei()->app->getNamespace());
 
         return $this->suc();
     }
