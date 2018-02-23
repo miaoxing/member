@@ -11,7 +11,7 @@ class MemberUpdateLevel extends Job
     {
         $member = wei()->member()->findById($data['id']);
 
-        wei()->event->trigger('async' . __CLASS__, [$member]);
+        wei()->event->trigger('asyncMemberUpdateLevel', [$member]);
 
         $job->delete();
     }
