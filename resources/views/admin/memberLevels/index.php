@@ -59,6 +59,7 @@ $view->layout();
         },
         {
           data: 'discount',
+          visible: false,
           render: function (data, type, full) {
             return data === '0.00' ? '无' : data;
           }
