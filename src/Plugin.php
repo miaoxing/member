@@ -238,9 +238,7 @@ class Plugin extends BasePlugin
             return;
         }
 
-        $member->incr('total_card_count', 1)
-            ->incr('card_count', 1)
-            ->save();
+        $member->updateAddCardStat();
     }
 
     public function onPostWechatUserConsumeCard(UserWechatCardRecord $userCard)
@@ -253,9 +251,7 @@ class Plugin extends BasePlugin
 
         // TODO
         try {
-            $member->decr('card_count', 1)
-                ->incr('used_card_count', 1)
-                ->save();
+            $member->updateUseCardStat();
         } catch (\PDOException $e) {
             $this->logger->info($e);
         }
@@ -274,9 +270,8 @@ class Plugin extends BasePlugin
         }
 
         if (!$app->getAttr('IsReturnBack')) {
-            // 转赠也是使用了该卡券,所以使用数增加,可用数减少
-            $member->incr('used_card_count', 1)
-                ->decr('card_count', 1);
+            // 转赠也是使用了该卡券
+            $member->updateUseCardStat();
         } else {
             // 退回则反之
             $member->incr('card_count', 1)

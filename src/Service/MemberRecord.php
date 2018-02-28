@@ -222,4 +222,20 @@ class MemberRecord extends BaseModel
 
         $this['score'] = $realScore;
     }
+
+    /**
+     * 更新领卡的统计
+     */
+    public function updateAddCardStat()
+    {
+        $this->incr('card_count', 1)->incr('total_card_count', 1)->save();
+    }
+
+    /**
+     * 更新使用卡的统计
+     */
+    public function updateUseCardStat()
+    {
+        $this->decr('card_count', 1)->incr('used_card_count', 1)->save();
+    }
 }
