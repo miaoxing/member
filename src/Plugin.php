@@ -249,7 +249,7 @@ class Plugin extends BasePlugin
             return;
         }
 
-        // TODO
+        // TODO 待移除
         try {
             $member->updateUseCardStat();
         } catch (\PDOException $e) {
@@ -257,15 +257,24 @@ class Plugin extends BasePlugin
         }
     }
 
-    public function onWechatUserGiftingCard(WeChatApp $app, User $user)
+    /**
+     * 用户转赠/退回卡券
+     *
+     * @param WeChatApp $app
+     */
+    public function onWechatUserGiftingCard(WeChatApp $app)
     {
-        $member = wei()->member->getMember($user);
-        if ($member->isNew()) {
+        /** @var UserWechatCardRecord $userCard */
+        $userCard = wei()->userWechatCard->getByCodeFromCache($app->getAttr('UserCardCode'));
+        if (!$userCard) {
             return;
         }
 
-        $userCard = wei()->userWechatCard->getByCodeFromCache($app->getAttr('UserCardCode'));
-        if (!$userCard) {
+        // 转赠时,FromUserName是当前用户,
+        // 退回时,FriendUserName是当前用户
+        // 因此会员以卡券对应的用户为准
+        $member = wei()->member->getMember($userCard->user);
+        if ($member->isNew()) {
             return;
         }
 
