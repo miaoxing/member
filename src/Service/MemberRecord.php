@@ -132,10 +132,15 @@ class MemberRecord extends BaseModel
     protected function loadCardCount()
     {
         $user = $this->user;
+        $supportTypes = wei()->wechatCard->getSupportTypes();
 
-        $totalCardCount = wei()->userWechatCard()->curApp()->count(['user_id' => $user['id']]);
+        $totalCardCount = wei()->userWechatCard()->curApp()->count([
+            'user_id' => $user['id'],
+            'type' => $supportTypes,
+        ]);
         $cardCount = wei()->userWechatCard()->curApp()->count([
             'user_id' => $user['id'],
+            'type' => $supportTypes,
             'status' => UserWechatCardRecord::STATUS_NORMAL,
         ]);
 

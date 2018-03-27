@@ -229,6 +229,10 @@ class Plugin extends BasePlugin
      */
     public function onPostWechatUserGetCard(WechatCardRecord $card)
     {
+        if (!in_array($card['type'], wei()->wechatCard->getSupportTypes())) {
+            return;
+        }
+
         if ($card['type'] == WechatCardRecord::TYPE_MEMBER_CARD) {
             return;
         }
