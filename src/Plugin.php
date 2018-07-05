@@ -188,7 +188,7 @@ class Plugin extends BasePlugin
             return;
         }
 
-        $this->updateFirstConsume($member, $order);
+        $this->updateConsumeTime($member, $order);
 
         $card = $member->wechatCard;
         $score = $card->calScore($order['amount']);
@@ -202,24 +202,24 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * 更新会员的首次消费时间
+     * 更新会员的上次和首次消费时间
      *
      * @param MemberRecord $member
      * @param Order $order
      */
-    public function updateFirstConsume(MemberRecord $member, Order $order)
+    public function updateConsumeTime(MemberRecord $member, Order $order)
     {
-        if ($member['consumed_at'] && $member['consumed_at'] != '0000-00-00 00:00:00') {
-            return;
+        $member['last_consumed_at'] = $order['payTime'];
+        if (!$member['consumed_at'] || $member['consumed_at'] == '0000-00-00 00:00:00') {
+            $member['consumed_at'] = $order['payTime'];
+            wei()->memberStatLog->create([
+                'card_id' => $member['card_id'],
+                'user_id' => $member['user_id'],
+                'action' => MemberStatLogRecord::ACTION_FIRST_CONSUME,
+            ]);
         }
 
-        $member->save(['consumed_at' => $order['payTime']]);
-
-        wei()->memberStatLog->create([
-            'card_id' => $member['card_id'],
-            'user_id' => $member['user_id'],
-            'action' => MemberStatLogRecord::ACTION_FIRST_CONSUME,
-        ]);
+        $member->save();
     }
 
     /**

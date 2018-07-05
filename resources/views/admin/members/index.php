@@ -76,6 +76,7 @@ $view->layout();
           <th>卡号</th>
           <th>等级</th>
           <th>首次消费时间</th>
+          <th>上次消费时间</th>
           <th>领取的优惠券数</th>
           <th>使用的优惠券数</th>
           <th>现有积分数</th>
@@ -198,7 +199,13 @@ $view->layout();
         {
           data: 'consumed_at',
           render: function (data) {
-            return data == '0000-00-00 00:00:00' ? '无' : data;
+            return data === '0000-00-00 00:00:00' ? '无' : data;
+          }
+        },
+        {
+          data: 'last_consumed_at',
+          render: function (data) {
+            return data === '0000-00-00 00:00:00' ? '无' : data;
           }
         },
         {
