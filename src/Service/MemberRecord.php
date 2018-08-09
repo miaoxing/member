@@ -224,8 +224,7 @@ class MemberRecord extends BaseModel
             $this->incr('used_score', -$score);
         }
         $this->save();
-
-        $this['score'] = $realScore;
+        $this->setRawValue('score', $realScore);
     }
 
     /**
