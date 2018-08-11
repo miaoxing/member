@@ -181,6 +181,43 @@ class MemberRecord extends BaseModel
     }
 
     /**
+     * @return array
+     * @todo 合并updateMemberLevel
+     */
+    public function syncMemberLevel()
+    {
+        $data = $this->getWechatSyncData();
+        if (!$data) {
+            return $this->suc();
+        }
+
+        $data += [
+            'code' => $this['code'],
+            'card_id' => $this['card_wechat_id'],
+        ];
+
+        $api = wei()->wechatAccount->getCurrentAccount()->createApiService();
+        $ret = $api->updateMemberCardUser($data);
+
+        wei()->queue->push(MemberUpdateLevel::class, ['id' => $this['id']], wei()->app->getNamespace());
+
+        return $ret;
+    }
+
+    protected function getWechatSyncData()
+    {
+        $image = $this->memberLevel['image'] ? $this->memberLevel['image'] : $this->wechatCard['background_pic_url'];
+
+        $data = [];
+        $ret = wei()->wechatMedia->updateUrlToWechatUrlRet($image);
+        if ($ret['code'] === 1) {
+            $data['background_pic_url'] = $ret['url'];
+        }
+
+        return $data;
+    }
+
+    /**
      * 按需更新等级,并返回微信接口所需的资料
      *
      * @return array

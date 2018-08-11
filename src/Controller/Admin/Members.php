@@ -169,7 +169,7 @@ class Members extends BaseController
             'description' => $req['description'],
         ]);
 
-        wei()->queue->push(MemberUpdateLevel::class, ['id' => $member['id']], wei()->app->getNamespace());
+        $member->syncMemberLevel();
 
         return $this->suc();
     }
