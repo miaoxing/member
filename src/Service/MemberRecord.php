@@ -159,10 +159,11 @@ class MemberRecord extends BaseModel
      *
      * @param int $score
      * @param array $data
+     * @param array $apiData
      */
-    public function notifyScoreChange($score, array $data)
+    public function notifyScoreChange($score, array $data, array $apiData = [])
     {
-        $apiData = [
+        $apiData += [
             'code' => $this['code'],
             'card_id' => $this['card_wechat_id'],
             'record_bonus' => $data['description'],
