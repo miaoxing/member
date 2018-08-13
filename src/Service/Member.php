@@ -95,6 +95,10 @@ class Member extends BaseService
         return $this->getMemberWithDeleted($user);
     }
 
+    /**
+     * @param $user
+     * @return MemberRecord
+     */
     protected function getMemberWithDeleted($user)
     {
         return wei()->member()
