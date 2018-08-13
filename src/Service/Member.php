@@ -83,4 +83,15 @@ class Member extends BaseService
         $plugin = wei()->plugin->getOneById('member');
         $plugin->onWechatUserGetCard($app, $user);
     }
+
+    public function findOrSyncMember(User $user)
+    {
+        $member = $this->getMember($user);
+        if ($member->isNew()) {
+            unset($this->members[$user['id']]);
+            $this->syncMember($user);
+        }
+
+        return $this->getMember($user);
+    }
 }
