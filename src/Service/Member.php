@@ -86,12 +86,20 @@ class Member extends BaseService
 
     public function findOrSyncMember(User $user)
     {
-        $member = $this->getMember($user);
+        $member = $this->getMemberWithDeleted($user);
         if ($member->isNew()) {
             unset($this->members[$user['id']]);
             $this->syncMember($user);
         }
 
-        return $this->getMember($user);
+        return $this->getMemberWithDeleted($user);
+    }
+
+    protected function getMemberWithDeleted($user)
+    {
+        return wei()->member()
+            ->curApp()
+            ->andWhere(['card_id' => wei()->setting('member.default_card_id')])
+            ->findOrInit(['user_id' => $user['id']]);
     }
 }
