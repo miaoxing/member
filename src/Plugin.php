@@ -336,7 +336,7 @@ class Plugin extends BasePlugin
             'card_wechat_id' => $card['wechat_id'],
             'code' => $app->getAttr('UserCardCode'),
             'wechat_open_id' => $user['wechatOpenId'],
-            'is_give_by_friend' => $app->getAttr('IsGiveByFriend'),
+            'is_give_by_friend' => (bool) $app->getAttr('IsGiveByFriend'),
             'friend_user_name' => (string) $app->getAttr('FriendUserName'),
             'outer_str' => (string) $app->getAttr('OuterStr'),
         ]);
