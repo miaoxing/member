@@ -171,6 +171,16 @@ class MemberRecord extends BaseModel
             'add_bonus' => $score,
         ];
 
+        // 通过配置是否发送通知,以便数据同步
+        $notify = wei()->member->isNotify();
+        if (isset($notify)) {
+            $apiData += [
+                'notify_optional' => [
+                    'is_notify_bonus' => $notify,
+                ],
+            ];
+        }
+
         // 按需更新等级
         $extraData = $this->updateMemberLevel();
         if ($extraData) {
