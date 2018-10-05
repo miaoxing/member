@@ -280,7 +280,7 @@ class MemberRecord extends BaseModel
      */
     public function updateAddCardStat()
     {
-        $this->incr('card_count', 1)->incr('total_card_count', 1)->save();
+        $this->incr('card_count')->incr('total_card_count')->save();
     }
 
     /**
@@ -288,6 +288,6 @@ class MemberRecord extends BaseModel
      */
     public function updateUseCardStat()
     {
-        $this->decr('card_count', 1)->incr('used_card_count', 1)->save();
+        $this->decr('card_count')->incr('used_card_count')->save();
     }
 }

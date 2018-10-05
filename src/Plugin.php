@@ -287,8 +287,8 @@ class Plugin extends BasePlugin
             $member->updateUseCardStat();
         } else {
             // 退回则反之
-            $member->incr('card_count', 1)
-                ->decr('used_card_count', 1);
+            $member->incr('card_count')
+                ->decr('used_card_count');
         }
         $member->save();
     }
@@ -428,8 +428,8 @@ class Plugin extends BasePlugin
             return;
         }
 
-        $member->incr('used_card_count', 1)
-            ->decr('card_count', 1)
+        $member->incr('used_card_count')
+            ->decr('card_count')
             ->save();
     }
 
