@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Member\Service;
 
+use Miaoxing\Config\ConfigTrait;
 use Miaoxing\Member\Plugin;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Service\User;
@@ -9,10 +10,19 @@ use Wei\RetTrait;
 
 /**
  * 会员
+ *
+ * @property bool $enableLevel
  */
 class Member extends BaseService
 {
     use RetTrait;
+    use ConfigTrait;
+
+    protected $configs = [
+        'enableLevel' => [
+            'default' => true,
+        ]
+    ];
 
     protected $members = [];
 

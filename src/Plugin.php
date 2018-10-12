@@ -51,17 +51,19 @@ class Plugin extends BasePlugin
             'sort' => 1000,
         ];
 
-        $navs[] = [
-            'parentId' => 'member',
-            'url' => 'admin/member-levels',
-            'name' => '会员等级',
-        ];
+        if (wei()->member->enableLevel) {
+            $navs[] = [
+                'parentId' => 'member',
+                'url' => 'admin/member-levels',
+                'name' => '会员等级',
+            ];
 
-        $navs[] = [
-            'parentId' => 'member',
-            'url' => 'admin/member-logs',
-            'name' => '会员日志',
-        ];
+            $navs[] = [
+                'parentId' => 'member',
+                'url' => 'admin/member-logs',
+                'name' => '会员日志',
+            ];
+        }
 
         $subCategories['member-setting'] = [
             'parentId' => 'member',
