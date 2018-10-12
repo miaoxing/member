@@ -1,6 +1,7 @@
 <?php
 
 $view->layout();
+$enableLevel = wei()->member->enableLevel;
 ?>
 
 <div class="row">
@@ -24,26 +25,27 @@ $view->layout();
                 placeholder="请输入手机号搜索">
             </div>
 
-            <label class="col-md-1 control-label" for="level-id">等级：</label>
-
-            <div class="col-md-3">
-              <select name="level_id" id="level-id" class="form-control">
-                <option value="">全部</option>
-                <option value="0">无</option>
-                <?php foreach ($levels as $level) : ?>
-                  <option value="<?= $level['id'] ?>"><?= $level['name'] ?></option>
-                <?php endforeach ?>
-              </select>
-            </div>
-
-          </div>
-
-          <div class="form-group form-group-sm">
             <label class="col-md-1 control-label" for="code">卡号：</label>
 
             <div class="col-md-3">
               <input type="text" class="form-control" id="code" name="card_code">
             </div>
+          </div>
+
+          <div class="form-group form-group-sm">
+            <?php if ($enableLevel) { ?>
+              <label class="col-md-1 control-label" for="level-id">等级：</label>
+
+              <div class="col-md-3">
+                <select name="level_id" id="level-id" class="form-control">
+                  <option value="">全部</option>
+                  <option value="0">无</option>
+                  <?php foreach ($levels as $level) : ?>
+                    <option value="<?= $level['id'] ?>"><?= $level['name'] ?></option>
+                  <?php endforeach ?>
+                </select>
+              </div>
+            <?php } ?>
 
             <label class="col-md-1 control-label" for="consumed-at">首次消费时间：</label>
 
@@ -74,7 +76,9 @@ $view->layout();
         <tr>
           <th>用户</th>
           <th>卡号</th>
+          <?php if ($enableLevel) { ?>
           <th>等级</th>
+          <?php } ?>
           <th>首次消费时间</th>
           <th>上次消费时间</th>
           <th>领取的优惠券数</th>
@@ -190,12 +194,14 @@ $view->layout();
         {
           data: 'code'
         },
+        <?php if ($enableLevel) { ?>
         {
           data: 'level_name',
           render: function (data) {
             return data || '无';
           }
         },
+        <?php } ?>
         {
           data: 'consumed_at',
           render: function (data) {
