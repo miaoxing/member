@@ -12,6 +12,7 @@ use Wei\RetTrait;
  * 会员
  *
  * @property bool $enableLevel
+ * @property bool $enableWechatCard
  */
 class Member extends BaseService
 {
@@ -21,7 +22,10 @@ class Member extends BaseService
     protected $configs = [
         'enableLevel' => [
             'default' => true,
-        ]
+        ],
+        'enableWechatCard' => [
+            'default' => true,
+        ],
     ];
 
     protected $members = [];

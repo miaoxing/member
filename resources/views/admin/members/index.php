@@ -2,6 +2,7 @@
 
 $view->layout();
 $enableLevel = wei()->member->enableLevel;
+$enableWechatCard = wei()->member->enableWechatCard;
 ?>
 
 <div class="row">
@@ -81,8 +82,10 @@ $enableLevel = wei()->member->enableLevel;
           <?php } ?>
           <th>首次消费时间</th>
           <th>上次消费时间</th>
+          <?php if ($enableWechatCard) { ?>
           <th>领取的优惠券数</th>
           <th>使用的优惠券数</th>
+          <?php } ?>
           <th>现有积分数</th>
           <th>使用过的积分数</th>
           <th>总的积分数</th>
@@ -214,12 +217,14 @@ $enableLevel = wei()->member->enableLevel;
             return data === '0000-00-00 00:00:00' ? '无' : data;
           }
         },
+        <?php if ($enableWechatCard) { ?>
         {
           data: 'total_card_count'
         },
         {
           data: 'used_card_count'
         },
+        <?php } ?>
         {
           data: 'score'
         },
