@@ -13,6 +13,7 @@ use Wei\RetTrait;
  *
  * @property bool $enableLevel
  * @property bool $enableWechatCard
+ * @property string $statType
  */
 class Member extends BaseService
 {
@@ -26,6 +27,9 @@ class Member extends BaseService
         'enableWechatCard' => [
             'default' => true,
         ],
+        'statType' => [
+            'default' => 'weekly'
+        ]
     ];
 
     protected $members = [];
