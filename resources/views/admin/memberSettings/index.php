@@ -23,6 +23,7 @@
         </div>
       </div>
 
+      <?php if (wei()->member->enableLevel) { ?>
       <div class="form-group">
         <label class="col-lg-2 control-label" for="init-level-id">
           <span class="text-warning">*</span>
@@ -37,10 +38,11 @@
               <?php endforeach ?>
             </select>
           <?php else : ?>
-            <p class="form-control-static">暂未等级</p>
+            <p class="form-control-static">暂无等级</p>
           <?php endif ?>
         </div>
       </div>
+      <?php } ?>
 
       <div class="clearfix form-actions form-group">
         <div class="col-lg-offset-2">
