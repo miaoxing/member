@@ -16,8 +16,14 @@ class MemberStatLog extends BaseService
 
     public function create(array $data)
     {
+        if (wei()->member->statType == 'weekly') {
+            $date = $this->getFirstDayOfWeek();
+        } else {
+            $date = wei()->time->today();
+        }
+
         return wei()->memberStatLog()->setAppId()->save($data + [
-                'created_date' => $this->getFirstDayOfWeek(),
+                'created_date' => $date,
             ]);
     }
 
