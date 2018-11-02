@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Member\Controller\Admin;
 
-use Miaoxing\Member\Job\MemberUpdateLevel;
 use Miaoxing\Member\Service\MemberRecord;
 use Miaoxing\Plugin\BaseController;
 
@@ -87,7 +86,7 @@ class Members extends BaseController
                     ]);
                 }
 
-                // no break
+            // no break
             default:
                 $levels = wei()->memberLevel()->curApp()->findAll();
 
@@ -98,33 +97,53 @@ class Members extends BaseController
     protected function renderCsv($members)
     {
         $labels = wei()->memberRecord->getLabels();
+        $enableLevel = wei()->member->enableLevel;
+        $enableWechatCard = wei()->member->enableWechatCard;
+
         $data = [];
         $data[0] = [
             '用户',
             '手机号',
             $labels['code'],
-            $labels['level_id'],
-            $labels['consumed_at'],
-            $labels['total_card_count'],
-            $labels['used_card_count'],
+        ];
+        if ($enableLevel) {
+            $data[0][] = $labels['level_id'];
+        }
+        $data[0][] = $labels['consumed_at'];
+        if ($enableWechatCard) {
+            $data[0] = array_merge($data[0], [
+                $labels['total_card_count'],
+                $labels['used_card_count'],
+            ]);
+        }
+        $data[0] = array_merge($data[0], [
             $labels['score'],
             $labels['used_score'],
             $labels['total_score'],
-        ];
+        ]);
 
         foreach ($members as $member) {
             $rowData = [
                 $member['user_nick_name'] . ' ',
                 $member['user']['mobile'],
                 $member['code'],
-                $member['level_name'],
-                $member['consumed_at'],
-                $member['total_card_count'],
-                $member['used_card_count'],
+            ];
+            if ($enableLevel) {
+                $rowData[] = $member['level_name'];
+            }
+            $rowData[] = $member['consumed_at'];
+
+            if ($enableWechatCard) {
+                $rowData = array_merge($rowData, [
+                    $member['total_card_count'],
+                    $member['used_card_count'],
+                ]);
+            }
+            $rowData = array_merge($rowData, [
                 $member['score'],
                 $member['used_score'],
                 $member['total_score'],
-            ];
+            ]);
 
             $newRowData = [];
             foreach ($rowData as $row) {
