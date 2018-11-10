@@ -21,6 +21,9 @@ namespace MiaoxingDoc\Member {
      * @property    \Miaoxing\Member\Service\MemberLogRecord $memberLogRecord
      * @method      \Miaoxing\Member\Service\MemberLogRecord|\Miaoxing\Member\Service\MemberLogRecord[] memberLogRecord()
      *
+     * @property    \Miaoxing\Member\Service\MemberModel $memberModel MemberModel
+     * @method      \Miaoxing\Member\Service\MemberModel|\Miaoxing\Member\Service\MemberModel[] memberModel()
+     *
      * @property    \Miaoxing\Member\Service\MemberRecord $memberRecord
      * @method      \Miaoxing\Member\Service\MemberRecord|\Miaoxing\Member\Service\MemberRecord[] memberRecord()
      *
@@ -73,6 +76,12 @@ namespace {
 
     /** @var Miaoxing\Member\Service\MemberLogRecord $memberLogRecord */
     $memberLogRecord = wei()->memberLogRecord;
+
+    /** @var Miaoxing\Member\Service\MemberModel $memberModel */
+    $member = wei()->memberModel();
+
+    /** @var Miaoxing\Member\Service\MemberModel|Miaoxing\Member\Service\MemberModel[] $memberModels */
+    $members = wei()->memberModel();
 
     /** @var Miaoxing\Member\Service\MemberRecord $memberRecord */
     $memberRecord = wei()->memberRecord;
