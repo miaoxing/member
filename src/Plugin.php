@@ -211,6 +211,11 @@ class Plugin extends BasePlugin
      */
     public function updateConsumeTime(MemberRecord $member, Order $order)
     {
+        // 忽略无金额的订单
+        if (!$order['amount']) {
+            return;
+        }
+
         $member['last_consumed_at'] = $order['payTime'];
         if (!$member['consumed_at'] || $member['consumed_at'] == '0000-00-00 00:00:00') {
             $member['consumed_at'] = $order['payTime'];
