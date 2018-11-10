@@ -28,11 +28,9 @@ class Member extends BaseService
             'default' => true,
         ],
         'statType' => [
-            'default' => 'weekly'
-        ]
+            'default' => 'weekly',
+        ],
     ];
-
-    protected $members = [];
 
     /**
      * @var bool
@@ -55,15 +53,11 @@ class Member extends BaseService
     {
         $user || $user = wei()->curUser;
 
-        if (!isset($this->members[$user['id']])) {
-            $this->members[$user['id']] = wei()->member()
-                ->curApp()
-                ->notDeleted()
-                ->andWhere(['card_id' => wei()->setting('member.default_card_id')])
-                ->findOrInit(['user_id' => $user['id']]);
-        }
-
-        return $this->members[$user['id']];
+        return wei()->member()
+            ->curApp()
+            ->notDeleted()
+            ->andWhere(['card_id' => wei()->setting('member.default_card_id')])
+            ->findOrInit(['user_id' => $user['id']]);
     }
 
     public function isNotify()
@@ -106,7 +100,6 @@ class Member extends BaseService
     {
         $member = $this->getMemberWithDeleted($user);
         if ($member->isNew()) {
-            unset($this->members[$user['id']]);
             $this->syncMember($user);
         }
 
