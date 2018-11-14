@@ -89,7 +89,9 @@ $enableWechatCard = wei()->member->enableWechatCard;
           <th>现有积分数</th>
           <th>使用过的积分数</th>
           <th>总的积分数</th>
+          <?php if ($enableLevel) { ?>
           <th class="t-5">操作</th>
+          <?php } ?>
         </tr>
         </thead>
         <tbody>
@@ -235,6 +237,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
           data: 'total_score',
           sortable: true
         },
+        <?php if ($enableLevel) { ?>
         {
           data: 'id',
           sClass: 'text-center',
@@ -242,6 +245,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
             return template.render('action-tpl', full);
           }
         }
+        <?php } ?>
       ]
     });
 
