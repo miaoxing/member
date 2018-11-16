@@ -465,4 +465,16 @@ class Plugin extends BasePlugin
 
         return wei()->score->changeScore($score, $data, $user);
     }
+
+    public function onBeforeScoreChange($user, $score, &$data)
+    {
+        if (isset($data['card_code'])) {
+            return;
+        }
+
+        $member = wei()->member->getMember($user);
+        if (!$member->isNew()) {
+            $data['card_code'] = $member['code'];
+        }
+    }
 }
