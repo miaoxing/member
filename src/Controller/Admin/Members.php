@@ -17,6 +17,14 @@ class Members extends BaseController
 
     protected $displayPageHeader = true;
 
+    public function testAction()
+    {
+        $user = wei()->userModel()->findById(2);
+        wei()->czj->updateUserOrderTime($user, '2018-11-10 00:00:00');
+
+        echo 'ok';
+    }
+
     public function indexAction($req)
     {
         set_time_limit(0);
