@@ -89,6 +89,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
           <th>现有积分数</th>
           <th>使用过的积分数</th>
           <th>总的积分数</th>
+          <th>领卡时间</th>
           <?php if ($enableLevel) { ?>
           <th class="t-5">操作</th>
           <?php } ?>
@@ -236,6 +237,9 @@ $enableWechatCard = wei()->member->enableWechatCard;
         {
           data: 'total_score',
           sortable: true
+        },
+        {
+          data: 'created_at',
         },
         <?php if ($enableLevel) { ?>
         {
