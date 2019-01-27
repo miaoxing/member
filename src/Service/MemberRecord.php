@@ -210,7 +210,7 @@ class MemberRecord extends BaseModel
         $api = wei()->wechatAccount->getCurrentAccount()->createApiService();
         $ret = $api->updateMemberCardUser($data);
 
-        wei()->queue->push(MemberUpdateLevel::class, ['id' => $this['id']], wei()->app->getNamespace());
+        wei()->queue->push(MemberUpdateLevel::class, ['id' => $this['id']]);
 
         return $ret;
     }
@@ -256,7 +256,7 @@ class MemberRecord extends BaseModel
             }
         }
 
-        wei()->queue->push(MemberUpdateLevel::class, ['id' => $this['id']], wei()->app->getNamespace());
+        wei()->queue->push(MemberUpdateLevel::class, ['id' => $this['id']]);
 
         return $data;
     }

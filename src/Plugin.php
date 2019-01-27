@@ -354,7 +354,7 @@ class Plugin extends BasePlugin
             'user_id' => $user['id'],
             'is_new' => $isNew,
             'attrs' => $app->getAttrs(),
-        ], wei()->app->getNamespace());
+        ]);
     }
 
     public function onAsyncUserGetMemberCard($data)
