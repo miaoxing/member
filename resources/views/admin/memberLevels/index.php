@@ -8,7 +8,7 @@ $view->layout();
 <?= $block->end() ?>
 
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-12">
     <!-- PAGE CONTENT BEGINS -->
     <div class="table-responsive">
       <table class="js-member-level-table record-table table table-bordered table-hover">

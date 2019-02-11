@@ -8,7 +8,7 @@ $view->layout();
 <?= $block->end() ?>
 
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-12">
 
     <div class="well well-sm bigger-110">
       名称：<?= $e($card['title']) ?>
