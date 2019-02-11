@@ -29,11 +29,11 @@ $view->layout();
     <h5 class="stat-title">趋势图</h5>
 
     <ul class="js-chart-tabs nav tab-underline">
-      <li role="presentation" class="active">
-        <a href="#receive" aria-controls="receive" role="tab" data-toggle="tab">领取数</a>
+      <li role="presentation" class="nav-item active">
+        <a href="#receive" class="nav-link" aria-controls="receive" role="tab" data-toggle="tab">领取数</a>
       </li>
-      <li role="presentation">
-        <a href="#first-consume" aria-controls="first-consume" role="tab" data-toggle="tab">首次消费数</a>
+      <li role="presentation" class="nav-item">
+        <a href="#first-consume" class="nav-link" aria-controls="first-consume" role="tab" data-toggle="tab">首次消费数</a>
       </li>
     </ul>
     <div class="tab-content m-t no-border">
