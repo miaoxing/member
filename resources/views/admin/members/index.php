@@ -112,10 +112,10 @@ $enableWechatCard = wei()->member->enableWechatCard;
       <div class="modal-content">
         <form class="js-edit-form form-horizontal" action="<%= $.url('admin/members/update-level') %>" method="post">
           <div class="modal-header">
+            <h5 class="modal-title">编辑会员等级</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">编辑会员等级</h4>
           </div>
           <div class="modal-body">
             <div class="form-group">
