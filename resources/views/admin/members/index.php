@@ -10,7 +10,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
     <!-- PAGE CONTENT BEGINS -->
     <div class="table-responsive">
       <form class="js-member-form form-horizontal filter-form" role="form">
-        <div class="well form-well m-b">
+        <div class="well">
           <div class="form-group form-group-sm">
             <label class="col-md-1 control-label" for="nick-name">昵称：</label>
 
