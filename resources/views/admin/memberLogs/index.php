@@ -13,7 +13,7 @@ $view->layout();
             <label class="col-md-1 control-label" for="created-by">操作人：</label>
 
             <div class="col-md-3">
-              <input type="text" class="js-nick-name form-control input-sm" id="created-by" name="created_by" placeholder="请输入昵称搜索">
+              <input type="text" class="js-nick-name form-control" id="created-by" name="created_by" placeholder="请输入昵称搜索">
             </div>
 
             <label class="col-md-1 control-label" for="created-at">操作时间：</label>

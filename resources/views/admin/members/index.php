@@ -15,14 +15,14 @@ $enableWechatCard = wei()->member->enableWechatCard;
             <label class="col-md-1 control-label" for="nick-name">昵称：</label>
 
             <div class="col-md-3">
-              <input type="text" class="js-nick-name form-control input-sm" id="nick-name" name="nick_name_user_id"
+              <input type="text" class="js-nick-name form-control" id="nick-name" name="nick_name_user_id"
                 placeholder="请输入昵称搜索">
             </div>
 
             <label class="col-md-1 control-label" for="mobile">手机号：</label>
 
             <div class="col-md-3">
-              <input type="text" class="js-mobile form-control input-sm" id="mobile" name="mobile_user_id"
+              <input type="text" class="js-mobile form-control" id="mobile" name="mobile_user_id"
                 placeholder="请输入手机号搜索">
             </div>
 
