@@ -11,7 +11,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
     <div class="table-responsive">
       <form class="js-member-form form-horizontal filter-form" role="form">
         <div class="well">
-          <div class="form-group form-group-sm">
+          <div class="form-group">
             <label class="col-md-1 control-label" for="nick-name">昵称：</label>
 
             <div class="col-md-3">
@@ -33,7 +33,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
             </div>
           </div>
 
-          <div class="form-group form-group-sm">
+          <div class="form-group">
             <?php if ($enableLevel) { ?>
               <label class="col-md-1 control-label" for="level-id">等级：</label>
 
@@ -58,7 +58,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
 
           </div>
 
-          <div class="clearfix form-group form-group-sm">
+          <div class="clearfix form-group">
             <div class="offset-md-1 col-md-6">
               <button class="btn btn-primary btn-sm" type="submit">
                 查询
