@@ -36,7 +36,7 @@ $view->layout();
         <a href="#first-consume" class="nav-link" aria-controls="first-consume" role="tab" data-toggle="tab">首次消费数</a>
       </li>
     </ul>
-    <div class="tab-content m-t no-border">
+    <div class="tab-content m-t border-0">
       <div role="tabpanel" class="js-chart-pane tab-pane text-center active" id="receive">
         加载中...
       </div>
