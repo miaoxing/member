@@ -69,7 +69,7 @@ $view->layout();
   require([
     'plugins/stat/js/stat',
     'template',
-    'highcharts',
+    'plugins/stat/js/highcharts',
     'form',
     'jquery-deparam',
     'plugins/admin/js/data-table',
