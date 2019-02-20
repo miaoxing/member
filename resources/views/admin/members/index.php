@@ -182,7 +182,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
     'comps/select2/select2.min',
     'css!comps/select2/select2',
     'css!comps/select2-bootstrap-css/select2-bootstrap',
-    'daterangepicker',
+    'plugins/admin/js/date-range-picker',
     'plugins/app/libs/jquery.populate/jquery.populate'
   ], function () {
     var $table = $('.js-member-table').dataTable({

@@ -73,7 +73,7 @@ $view->layout();
     'form',
     'jquery-deparam',
     'plugins/admin/js/data-table',
-    'daterangepicker'
+    'plugins/admin/js/date-range-picker'
   ], function (stat, template) {
     // 渲染底部表格
     var $statTable = $('.js-stat-table').dataTable({
