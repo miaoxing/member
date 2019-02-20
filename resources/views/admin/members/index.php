@@ -177,7 +177,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
 <?= $block->js() ?>
 <script>
   require([
-    'dataTable',
+    'plugins/admin/js/data-table',
     'form',
     'comps/select2/select2.min',
     'css!comps/select2/select2',

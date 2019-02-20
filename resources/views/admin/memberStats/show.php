@@ -72,7 +72,7 @@ $view->layout();
     'highcharts',
     'form',
     'jquery-deparam',
-    'dataTable',
+    'plugins/admin/js/data-table',
     'daterangepicker'
   ], function (stat, template) {
     // 渲染底部表格

@@ -38,7 +38,7 @@ $view->layout();
 
 <?= $block->js() ?>
 <script>
-  require(['dataTable', 'form'], function () {
+  require(['plugins/admin/js/data-table', 'form'], function () {
     $('.js-member-level-table').dataTable({
       ajax: {
         url: $.queryUrl('admin/member-levels.json')
