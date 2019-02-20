@@ -71,7 +71,7 @@ $view->layout();
     'template',
     'plugins/stat/js/highcharts',
     'form',
-    'jquery-deparam',
+    'jquery-unparam',
     'plugins/admin/js/data-table',
     'plugins/admin/js/date-range-picker'
   ], function (stat, template) {
