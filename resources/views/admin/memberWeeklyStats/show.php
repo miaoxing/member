@@ -4,7 +4,7 @@ $view->layout();
 ?>
 
 <?= $block->css() ?>
-<link rel="stylesheet" href="<?= $asset('assets/admin/stat.css') ?>"/>
+<link rel="stylesheet" href="<?= $asset('plugins/stat/css/stat.css') ?>"/>
 <?= $block->end() ?>
 
 <div class="row">
