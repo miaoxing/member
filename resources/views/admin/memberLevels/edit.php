@@ -100,7 +100,7 @@ $view->layout();
 <script>
   require([
     'form',
-    'validator',
+    'plugins/app/js/validation',
     'plugins/app/libs/jquery.populate/jquery.populate',
     'plugins/app/libs/jquery-toggle-display/jquery-toggle-display',
     'plugins/admin/js/image-upload'

@@ -60,7 +60,7 @@
 
 <?= $block->js() ?>
 <script>
-  require(['form', 'ueditor', 'validator'], function () {
+  require(['form', 'ueditor', 'plugins/app/js/validation'], function () {
     $('.js-setting-form')
       .loadJSON(<?= $setting->getFormJson([
         'member.default_card_id' => 0,
