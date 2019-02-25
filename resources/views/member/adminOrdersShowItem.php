@@ -1,7 +1,7 @@
 <div class="form-group">
   <label class="col-sm-2 control-label">抵用<?= $setting('score.title', '积分') ?></label>
   <div class="col-sm-10">
-    <p class="form-control-static">
+    <p class="form-control-plaintext">
       <% if (!config.memberUseScore) { %>
         -
       <% } else { %>

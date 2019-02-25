@@ -122,7 +122,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
               <label class="col-lg-3 control-label">当前等级</label>
 
               <div class="col-lg-8">
-                <p class="form-control-static" name="level_name"></p>
+                <p class="form-control-plaintext" name="level_name"></p>
               </div>
             </div>
 
@@ -130,7 +130,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
               <label class="col-lg-3 control-label">积分所属等级</label>
 
               <div class="col-lg-8">
-                <p class="form-control-static" name="score_level_name"></p>
+                <p class="form-control-plaintext" name="score_level_name"></p>
               </div>
             </div>
 

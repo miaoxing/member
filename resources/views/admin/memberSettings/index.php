@@ -18,7 +18,7 @@
               <?php endforeach ?>
             </select>
           <?php else: ?>
-            <p class="form-control-static">暂无会员卡</p>
+            <p class="form-control-plaintext">暂无会员卡</p>
           <?php endif ?>
         </div>
       </div>
@@ -38,7 +38,7 @@
               <?php endforeach ?>
             </select>
           <?php else : ?>
-            <p class="form-control-static">暂无等级</p>
+            <p class="form-control-plaintext">暂无等级</p>
           <?php endif ?>
         </div>
       </div>
