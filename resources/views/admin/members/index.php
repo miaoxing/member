@@ -64,7 +64,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
                 查询
               </button>
               &nbsp;
-              <button class="js-export-csv btn btn-default btn-sm" type="button">
+              <button class="js-export-csv btn btn-secondary btn-sm" type="button">
                 导出
               </button>
             </div>
@@ -160,7 +160,7 @@ $enableWechatCard = wei()->member->enableWechatCard;
             <input type="hidden" name="id" id="id">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
             <button type="submit" class="btn btn-primary">保存</button>
           </div>
         </form>
