@@ -99,7 +99,7 @@ $view->layout();
 <?= $block->js() ?>
 <script>
   require([
-    'form',
+    'plugins/admin/js/form',
     'plugins/app/js/validation',
     'plugins/app/libs/jquery.populate/jquery.populate',
     'plugins/app/libs/jquery-toggle-display/jquery-toggle-display',

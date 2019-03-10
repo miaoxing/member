@@ -70,7 +70,7 @@ $view->layout();
     'plugins/stat/js/stat',
     'plugins/app/libs/artTemplate/template.min',
     'plugins/stat/js/highcharts',
-    'form',
+    'plugins/admin/js/form',
     'plugins/admin/js/data-table',
     'plugins/admin/js/date-range-picker'
   ], function (stat, template) {

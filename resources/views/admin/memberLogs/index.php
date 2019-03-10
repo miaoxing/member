@@ -70,7 +70,7 @@ $view->layout();
 <script>
   require([
     'plugins/admin/js/data-table',
-    'form',
+    'plugins/admin/js/form',
     'comps/select2/select2.min',
     'css!comps/select2/select2',
     'css!comps/select2-bootstrap-css/select2-bootstrap',
