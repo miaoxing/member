@@ -16,13 +16,11 @@ $view->layout();
 
     <div class="well well-sm">
       <form class="js-chart-form form-inline">
-        <div class="form-group">
-          <label class="control-label" for="range-date">日期范围</label>
-          <input type="text" class="js-range-date form-control text-center input-large" id="range-date"
-            value="<?= $e($startDate . ' ~ ' . $endDate) ?>">
-          <input type="hidden" class="js-start-date" name="startDate">
-          <input type="hidden" class="js-end-date" name="endDate">
-        </div>
+        <label class="mr-2" for="range-date">日期范围</label>
+        <input type="text" class="js-range-date form-control text-center input-large" id="range-date"
+          value="<?= $e($startDate . ' ~ ' . $endDate) ?>">
+        <input type="hidden" class="js-start-date" name="startDate">
+        <input type="hidden" class="js-end-date" name="endDate">
       </form>
     </div>
 
@@ -70,7 +68,7 @@ $view->layout();
     'plugins/stat/js/stat',
     'plugins/app/libs/artTemplate/template.min',
     'plugins/stat/js/highcharts',
-    'form',
+    'plugins/admin/js/form',
     'plugins/admin/js/data-table',
     'plugins/admin/js/date-range-picker'
   ], function (stat, template) {
