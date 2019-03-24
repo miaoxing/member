@@ -60,11 +60,11 @@ $enableWechatCard = wei()->member->enableWechatCard;
 
           <div class="clearfix form-group">
             <div class="offset-md-1 col-md-6">
-              <button class="btn btn-primary btn-sm" type="submit">
+              <button class="btn btn-primary" type="submit">
                 查询
               </button>
               &nbsp;
-              <button class="js-export-csv btn btn-secondary btn-sm" type="button">
+              <button class="js-export-csv btn btn-secondary" type="button">
                 导出
               </button>
             </div>
